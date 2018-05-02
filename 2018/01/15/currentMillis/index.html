@@ -234,7 +234,7 @@
 
     
         <meta property="article:published_time" content="Mon Jan 15 2018 21:07:13 GMT+0800">
-        <meta property="article:modified_time" content="Fri Apr 06 2018 22:58:44 GMT+0800">
+        <meta property="article:modified_time" content="Wed May 02 2018 23:31:59 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -257,7 +257,7 @@
     "mainEntityOfPage": "http://www.berberman.cn/2018/01/15/currentMillis/index.html",
     "headline": "关于System.getCurrentMillis()",
     "datePublished": "Mon Jan 15 2018 21:07:13 GMT+0800",
-    "dateModified": "Fri Apr 06 2018 22:58:44 GMT+0800",
+    "dateModified": "Wed May 02 2018 23:31:59 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "berberman",
@@ -491,13 +491,11 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
-<p>在 Java 程序开发时，我们可以用 <code>Date</code>、<code>Calendar</code> 等类获取日期来计算时间。例如要获取两次运行周期或一段阻塞运算所花时间时，我们可以用两次 <code>System.currentTimeMillis()</code> 来快速获取时间差，单位为毫秒。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 Java 程序开发时，我们可以用 <code>Date</code>、<code>Calendar</code> 等类获取日期来计算时间。我们通常使用 <code>System.currentTimeMillis()</code> 的时戳，来快速获取时间差，单位为毫秒。</p>
 <blockquote>
 <p><strong><code>System.currentTimeMillis()</code> 这玩意返回的是 <code>long</code> 类型的数据，但是数据都是有最大值的啊，万一哪天超了可咋整。</strong></p>
 </blockquote>
-<h2 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h2><hr>
-<p>超肯定是会超，但是啥时候超我们可以简单算上一笔。<br>前方使用 Mathematica 计算。（因为单位换算太麻烦了，偷点懒。）</p>
+<h2 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h2><p>超肯定是会超，但是啥时候超我们可以简单算上一笔。<br>前方使用 Mathematica 计算。（因为单位换算太麻烦了，偷点懒。）</p>
 <hr>
 <p>首先，<code>long</code> 数据类型的最大值正是 <code>2^63-1</code>。这就不过多解释了。一毫秒是 <code>1/1000</code> 秒，一秒是<code>1/3600</code>时，一时是<code>1/24</code>天。知道这些我们就可以算出 <code>long</code> 最多能存多少天的毫秒。</p>
 <pre><code class="wolfram">longMaxValue = 2^63 - 1
@@ -517,8 +515,7 @@ daysLongCanStorage = Quantity[longMaxValue/millisecondsDay, &quot;Days&quot;]
    &quot;Seconds&quot;}]]
 </code></pre>
 <p>也就是 <code>292471160年7月7日12时8分58.2528秒</code>。  </p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
-<p>总之这玩意还能存这么久，想要活那么长时间不太可能，不过那时候没准人类早已入土，更别说 <code>Java</code> 了。<br>贴上全部代码：</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之这玩意还能存这么久，想要活那么长时间不太可能，不过那时候没准人类早已入土，更别说 <code>Java</code> 了。<br>贴上全部代码：</p>
 <pre><code class="wolfram">In[0]:=longMaxValue = 2^63 - 1
       millisecondsDay = 1000*60*60*24
       daysLongCanStorage = Quantity[longMaxValue/millisecondsDay,&quot;Days&quot;]
@@ -532,7 +529,6 @@ Out[3]:= Quantity[1.06752*10^11, &quot;Days&quot;]
 Out[4]:= Quantity[MixedMagnitude[{292471160, 7, 7, 12, 8, 58.2528}],
             MixedUnit[{&quot;Years&quot;, &quot;Months&quot;, &quot;Days&quot;, &quot;Hours&quot;, &quot;Minutes&quot;, &quot;Seconds&quot;}]]
 </code></pre>
-<hr>
 <p><strong>顺便在这天来临之前的 <code>292471160年7月7日12时8分58.2528秒</code> 留个脚印。</strong></p>
 
         

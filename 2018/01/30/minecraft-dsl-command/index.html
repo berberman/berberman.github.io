@@ -234,7 +234,7 @@
 
     
         <meta property="article:published_time" content="Tue Jan 30 2018 22:04:04 GMT+0800">
-        <meta property="article:modified_time" content="Tue May 01 2018 18:21:31 GMT+0800">
+        <meta property="article:modified_time" content="Wed May 02 2018 23:40:37 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -257,7 +257,7 @@
     "mainEntityOfPage": "http://www.berberman.cn/2018/01/30/minecraft-dsl-command/index.html",
     "headline": "Minecraft-Bukkit插件-DSL注册命令",
     "datePublished": "Tue Jan 30 2018 22:04:04 GMT+0800",
-    "dateModified": "Tue May 01 2018 18:21:31 GMT+0800",
+    "dateModified": "Wed May 02 2018 23:40:37 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "berberman",
@@ -510,7 +510,7 @@
  }
 </code></pre>
 <p>定义完了 <code>PackingCommand</code> 后，就该写他的 DSL Builder 了。代码如下：</p>
-<pre><code class="kotlin">class DSLCommandBuilder(val name: String) {
+<pre><code class="kotlin">class CommandBuilderDsl(val name: String) {
     //下面这些成员都带有默认值，因为每项不是必要的，包括 `action`。
     var action: (CommandSender, String, Array&lt;out String&gt;) -&gt; Unit =
       { _, _, _ -&gt; true }
@@ -530,86 +530,46 @@
     }
 
     fun addAlias(alias: String) = aliases.add(alias)
-
-    //和下面的 whenSenderIsPlayer 配合写出sender 是否 Player 的两种情况时的动作，
-    //可避免使用重复的 if else
-    class PlayerAndSenderBlocksData
-    (private val senderInstance: CommandSender,
-     private val isPlayer: Boolean,
-     private val result: Boolean) {
-
-    infix fun otherwise(block: CommandSender.() -&gt; Boolean) =
-            if (!isPlayer) senderInstance.block() else result
-    }
-
-    fun whenSenderIsPlayer(sender: CommandSender, block: Player.() -&gt; Boolean) =
-        (sender as? Player != null).let { isPlayer -&gt;
-            PlayerAndSenderBlocksData(sender, isPlayer, if (isPlayer)
-            (sender as Player).block() else false)
-        }
-
 }
 </code></pre>
-<p>写完 <code>DSLCommandBuilder</code> 后还需要提供一个 <code>Scope</code> 来构造 <code>Builder</code>，在这之前构造好的 <code>Command</code> 需要存起来，在插件启用时调用，这部分不贴代码了，就是一个单例的玩意拿着一个<code>MutableList&lt;PackingCommand&gt;</code>，有个注册方法。<code>Scope</code> 的代码如下：</p>
-<pre><code class="kotlin">class DSLCommandScope {
-    fun command(name: String, block: DSLCommandBuilder.() -&gt; Unit) {
-        DSLCommandBuilder(name).apply(block).apply {
+<p>写完 <code>CommandBuilderDsl</code> 后还需要提供一另一个 <code>CommandScope</code> 来构造 <code>Builder</code>，在这之前构造好的 <code>Command</code> 需要存起来，在插件启用时调用，这部分不贴代码了，就是一个<code>MutableList&lt;PackingCommand&gt;</code>，有个注册方法。<code>CommandScope</code> 的代码如下：</p>
+<pre><code class="kotlin">class CommandScopeDsl {
+    fun command(name: String, block: CommandBuilderDsl.() -&gt; Unit) {
+        CommandBuilderDsl(name).apply(block).apply {
             PackingCommand(this.name, description, usageMessage, aliases, action, result)
                     .let(CommandHolder::add)
         }
     }
 }
 </code></pre>
-<p>目前 <code>DSLCommandScope</code> 中就一个函数，可以省略 <code>Scope</code>，不过未来肯定还会加东西，所以写成这样。贴一下前面的注册方法，<code>commands</code> 是那个持有 <code>PackingCommand</code> 的 list：</p>
+<p>目前 <code>CommandScope</code> 中就一个函数，也可以省略 <code>CommandScope</code>，直接将 <code>command()</code> 改为顶层函数，不过未来肯定还会加东西，而且这样写是不合理的。贴一下前面的注册方法，<code>commands</code> 是那个持有 <code>PackingCommand</code> 的 list：</p>
 <pre><code class="kotlin">fun register(commandMap: CommandMap) {
         commands.forEach {
             commandMap.register(&quot;DemoPlugin&quot;, it as Command)
         }
     }
 </code></pre>
-<p>再加上把 <code>DSLCommandScope</code> 开放出来的函数：</p>
-<pre><code class="kotlin">fun buildCommands(block: DSLCommandScope.() -&gt; Unit) {
-    DSLCommandScope().apply(block)
+<p>再加上把 <code>CommandScope</code> 开放出来的函数：</p>
+<pre><code class="kotlin">fun buildCommands(block: CommandScope.() -&gt; Unit) {
+    CommandScope().apply(block)
 }
 </code></pre>
 <p>至此就完成了，在插件启用时调用 <code>CommandHolder.register(getCommandMap())</code> 注册就好。<br>随便写个命令：</p>
 <pre><code class="kotlin">buildCommands {
     command(&quot;gg&quot;) {
         action { sender -&gt;
-            whenSenderIsPlayer(sender) {
-                (1..5).forEach {
-                    world.summonEntity&lt;Zombie&gt;(location)
-                }
-                true
-            } otherwise {
-                sendMessage(&quot;你不是玩家&quot;)
-                false
-            }
+            sender.sendMessage(&quot;233&quot;)
+            true
         }
     }
-    command(&quot;pig&quot;) {
-        action { sender -&gt;
-            whenSenderIsPlayer(sender) {
-                (0..4).forEach {
-                    world.summonEntity&lt;Pig&gt;(location)
-                }
-                true
-            }
-        }
-    }
-    command(&quot;init&quot;) {
-        action { sender -&gt;
-            sender.hasPermission(&quot;init&quot;).takeIf { it }?.let {
-                Bukkit.getWorlds().flatMap { it.players }.forEach {
-                    it.inventory.clear()
-                    it.gameMode = GameMode.SURVIVAL
-                }
-            }
+    command(&quot;xxx&quot;){
+        action{sender-&gt;
+            //xxxx
         }
     }
 }
 </code></pre>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>命令多了可能看起来很乱，大括号也越写越多，<del>轮子造好！</del></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>命令多了看起来很乱，大括号也越写越多，垃圾代码 x1</p>
 
         
     
