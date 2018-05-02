@@ -69,10 +69,10 @@
   
     
     <entry>
-      <title>About</title>
+      <title>关于</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
-      <content type="html"><![CDATA[<pre><code class="kotlin">val berberman = Boy().apply{  name = &quot;berberman&quot;  location = Location.Beijing  hobbies = arrayOf(&quot;Coding&quot;,&quot;Music&quot;)  contacts.putAll(hashMapOf(    &quot;Email&quot; to &quot;potato@berberman.cn&quot;,    &quot;Telegram&quot; to &quot;@berberman&quot;    ))}</code></pre>]]></content>
+      <content type="html"><![CDATA[<pre><code class="kotlin">val berberman = Boy().apply{  name = &quot;berberman&quot;  location = Location.Beijing  contacts.putAll(hashMapOf(    &quot;Email&quot; to &quot;potato@berberman.cn&quot;,    &quot;Telegram&quot; to &quot;@berberman&quot;    ))}</code></pre><h2 id="何人甚于鄙之鶸乎"><a href="#何人甚于鄙之鶸乎" class="headerlink" title="何人甚于鄙之鶸乎"></a><strong>何人甚于鄙之鶸乎</strong></h2>]]></content>
     </entry>
     
     <entry>
