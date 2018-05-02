@@ -69,17 +69,17 @@
   
     
     <entry>
-      <title>ʱ����</title>
-      <link href="/timeline/index.html"/>
-      <url>/timeline/index.html</url>
-      <content type="html"><![CDATA[]]></content>
-    </entry>
-    
-    <entry>
       <title>About</title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
       <content type="html"><![CDATA[<pre><code class="kotlin">val berberman = Boy().apply{  name = &quot;berberman&quot;  location = Location.Beijing  hobbies = arrayOf(&quot;Coding&quot;,&quot;Music&quot;)  contacts.putAll(hashMapOf(    &quot;Email&quot; to &quot;potato@berberman.cn&quot;,    &quot;Telegram&quot; to &quot;@berberman&quot;    ))}</code></pre>]]></content>
+    </entry>
+    
+    <entry>
+      <title>时间轴</title>
+      <link href="/timeline/index.html"/>
+      <url>/timeline/index.html</url>
+      <content type="html"><![CDATA[]]></content>
     </entry>
     
   
