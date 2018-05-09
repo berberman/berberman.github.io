@@ -234,7 +234,7 @@
 
     
         <meta property="article:published_time" content="Mon Jan 15 2018 21:07:13 GMT+0800">
-        <meta property="article:modified_time" content="Wed May 02 2018 23:31:59 GMT+0800">
+        <meta property="article:modified_time" content="Tue May 08 2018 00:04:57 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -257,7 +257,7 @@
     "mainEntityOfPage": "http://www.berberman.cn/2018/01/15/currentMillis/index.html",
     "headline": "关于System.getCurrentMillis()",
     "datePublished": "Mon Jan 15 2018 21:07:13 GMT+0800",
-    "dateModified": "Wed May 02 2018 23:31:59 GMT+0800",
+    "dateModified": "Tue May 08 2018 00:04:57 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "berberman",
@@ -341,7 +341,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#计算"><span class="post-toc-number">2.</span> <span class="post-toc-text">计算</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">3.</span> <span class="post-toc-text">总结</span></a></li></ol>
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#计算"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">计算</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">总结</span></a></li></ol></li></ol>
     </ul>
     
 
@@ -491,7 +491,7 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在 Java 程序开发时，我们可以用 <code>Date</code>、<code>Calendar</code> 等类获取日期来计算时间。我们通常使用 <code>System.currentTimeMillis()</code> 的时戳，来快速获取时间差，单位为毫秒。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在 Java 程序开发时，我们可以用 <code>Date</code>、<code>Calendar</code> 等类获取日期来计算时间。我们通常使用 <code>System.currentTimeMillis()</code> 的时戳，来快速获取时间差，单位为毫秒。</p>
 <blockquote>
 <p><strong><code>System.currentTimeMillis()</code> 这玩意返回的是 <code>long</code> 类型的数据，但是数据都是有最大值的啊，万一哪天超了可咋整。</strong></p>
 </blockquote>
@@ -514,8 +514,9 @@ daysLongCanStorage = Quantity[longMaxValue/millisecondsDay, &quot;Days&quot;]
  MixedUnit[{&quot;Years&quot;, &quot;Months&quot;, &quot;Days&quot;, &quot;Hours&quot;, &quot;Minutes&quot;,
    &quot;Seconds&quot;}]]
 </code></pre>
-<p>也就是 <code>292471160年7月7日12时8分58.2528秒</code>。  </p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之这玩意还能存这么久，想要活那么长时间不太可能，不过那时候没准人类早已入土，更别说 <code>Java</code> 了。<br>贴上全部代码：</p>
+<p>也就是 <code>292471160年7月7日12时8分58.2528秒</code>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之这玩意还能存这么久，想要活那么长时间不太可能，不过那时候没准人类早已入土，更别说 <code>Java</code> 了。</p>
+<p>贴上全部代码：</p>
 <pre><code class="wolfram">In[0]:=longMaxValue = 2^63 - 1
       millisecondsDay = 1000*60*60*24
       daysLongCanStorage = Quantity[longMaxValue/millisecondsDay,&quot;Days&quot;]
@@ -648,7 +649,7 @@ Out[4]:= Quantity[MixedMagnitude[{292471160, 7, 7, 12, 8, 58.2528}],
             </a>
             <ul class="dropdown-menu">
             <li>
-                <a class="sidebar_archives-link" href="/archives/2018/01/">一月 2018<span class="sidebar_archives-count">3</span></a>
+                <a class="sidebar_archives-link" href="/archives/2018/05/">五月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/01/">一月 2018<span class="sidebar_archives-count">3</span></a>
             </ul>
         </li>
         

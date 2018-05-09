@@ -43,7 +43,7 @@
     
     <title>
         
-            关于 | 
+            Minecraft-Bukkit插件-插件类加载器 | 
         
         berberman的博客
     </title>
@@ -54,7 +54,7 @@
 
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" itemprop="description" content="berberman">
-    <meta name="keywords" content="">
+    <meta name="keywords" content=",编程">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -210,7 +210,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="berberman的博客">
-    <meta name="msapplication-starturl" content="http://www.berberman.cn/about/">
+    <meta name="msapplication-starturl" content="http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="berberman的博客">
@@ -225,13 +225,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://www.berberman.cn/about/">
+    <meta property="og:url" content="http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="关于 | berberman的博客">
+    <meta property="og:title" content="Minecraft-Bukkit插件-插件类加载器 | berberman的博客">
     <meta property="og:image" content="/img/favicon.ico">
     <meta property="og:description" content="berberman">
-    
+    <meta property="og:article:tag" content="编程"> 
 
+    
+        <meta property="article:published_time" content="Tue May 08 2018 00:02:03 GMT+0800">
+        <meta property="article:modified_time" content="Thu May 10 2018 00:03:00 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -239,13 +242,43 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://www.berberman.cn/about/index.html" />
+        <link rel="canonical" href="http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/index.html" />
     
 
     <!-- Structured-data for SEO -->
     
         
 
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/index.html",
+    "headline": "Minecraft-Bukkit插件-插件类加载器",
+    "datePublished": "Tue May 08 2018 00:02:03 GMT+0800",
+    "dateModified": "Thu May 10 2018 00:03:00 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "berberman",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/avatar.jpg"
+        },
+        "description": "鶸"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "berberman的博客",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.ico"
+        }
+    },
+    "keywords": ",编程",
+    "description": "berberman",
+}
+</script>
 
 
     
@@ -281,6 +314,39 @@
 
                     <!-- Post TOC -->
 
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#插件注册分析"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">插件注册分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#大雾"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">大雾</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">总结</span></a></li></ol></li></ol>
+    </ul>
+    
+
+
+
 
 <!-- Layouts -->
 
@@ -307,7 +373,7 @@
         
     
             <p class="article-headline-p">
-                关于
+                Minecraft-Bukkit插件-插件类加载器
             </p>
         </div>
 
@@ -326,7 +392,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>berberman</strong>
-        <span>5月 03, 2018</span>
+        <span>5月 08, 2018</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -344,6 +410,15 @@
 
     <!-- Tags (bookmark) -->
     
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/编程/">编程</a>
+    </ul>
+    
 
     <!-- Share -->
     
@@ -358,7 +433,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=关于&url=http://www.berberman.cn/about/index.html&pic=http://www.berberman.cn/img/favicon.ico&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Minecraft-Bukkit插件-插件类加载器&url=http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/index.html&pic=http://www.berberman.cn/img/favicon.ico&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 分享到微博
             </li>
@@ -367,7 +442,7 @@
 
     <!-- Share Twitter -->
     
-        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=关于&url=http://www.berberman.cn/about/index.html&via=berberman" target="_blank">
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Minecraft-Bukkit插件-插件类加载器&url=http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/index.html&via=berberman" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Twitter
             </li>
@@ -376,7 +451,7 @@
 
     <!-- Share Facebook -->
     
-        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://www.berberman.cn/about/index.html" target="_blank">
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Facebook
             </li>
@@ -385,7 +460,7 @@
 
     <!-- Share Google+ -->
     
-        <a class="post_share-link" href="https://plus.google.com/share?url=http://www.berberman.cn/about/index.html" target="_blank">
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 Google+
             </li>
@@ -397,7 +472,7 @@
 
     <!-- Share QQ -->
     
-        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=berberman的博客&title=关于&summary=berberman&pics=http://www.berberman.cn/img/favicon.ico&url=http://www.berberman.cn/about/index.html" target="_blank">
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=berberman的博客&title=Minecraft-Bukkit插件-插件类加载器&summary=berberman&pics=http://www.berberman.cn/img/favicon.ico&url=http://www.berberman.cn/2018/05/08/minecraft-plugin-classloader/index.html" target="_blank">
             <li class="mdl-menu__item">
                 分享到 QQ
             </li>
@@ -416,16 +491,345 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <pre><code class="kotlin">val berberman = Boy().apply{
-  name = &quot;berberman&quot;
-  location = Location.Beijing
-  contacts.putAll(hashMapOf(
-    &quot;Email&quot; to &quot;potato@berberman.cn&quot;,
-    &quot;Telegram&quot; to &quot;@berberman&quot;
-    ))
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在开发 Bukkit 插件库的过程中，有时会需要用到插件主类实例的情况。举一个栗子：</p>
+<pre><code class="kotlin">registerEventListeners(this) {
+    event&lt;PlayerJoinEvent&gt; {
+        player.sendMessage(&quot;Hello!&quot;)
+    }
 }
 </code></pre>
-<h2 id="何人甚于鄙之鶸乎"><a href="#何人甚于鄙之鶸乎" class="headerlink" title="何人甚于鄙之鶸乎"></a><strong>何人甚于鄙之鶸乎</strong></h2>
+<p>因为事件监听器的注册需要绑定在插件上，对于库/前置插件开发者来说，需要每次用到插件实例时让调用者提供。看起来没什么不对的，但这里有一个更好的方法。我们先来一波分析。</p>
+<h2 id="插件注册分析"><a href="#插件注册分析" class="headerlink" title="插件注册分析"></a>插件注册分析</h2><p>服务器插件的加载是由 <code>CraftServer</code> 的 <code>loadPlugins</code> 开始的。</p>
+<pre><code class="java">public final class CraftServer implements Server {
+    public void loadPlugins() {
+        this.pluginManager.registerInterface(JavaPluginLoader.class);
+        File pluginFolder = (File)this.console.options.valueOf(&quot;plugins&quot;);
+        if (pluginFolder.exists()) {
+            Plugin[] plugins = this.pluginManager.loadPlugins(pluginFolder);
+            Plugin[] var6 = plugins;
+            int var5 = plugins.length;
+
+            for(int var4 = 0; var4 &lt; var5; ++var4) {
+                Plugin plugin = var6[var4];
+
+                try {
+                    String message = String.format(&quot;Loading %s&quot;, plugin.getDescription().getFullName());
+                    plugin.getLogger().info(message);
+                    plugin.onLoad();
+                } catch (Throwable var8) {
+                    Logger.getLogger(CraftServer.class.getName()).log(Level.SEVERE, var8.getMessage() + &quot; initializing &quot; + plugin.getDescription().getFullName() + &quot; (Is it up to date?)&quot;, var8);
+                }
+            }
+        } else {
+            pluginFolder.mkdir();
+        }
+
+    }
+}
+</code></pre>
+<p>首先，<code>CraftServer</code> 调用了其内部持有的 <code>SimplePluginManager</code> 的 <code>registerInterface(JavaPluginLoader.class)</code> 方法</p>
+<pre><code class="java">public final class SimplePluginManager implements PluginManager {
+    public void registerInterface(Class&lt;? extends PluginLoader&gt; loader) throws IllegalArgumentException {
+        PluginLoader instance;
+
+        if (PluginLoader.class.isAssignableFrom(loader)) {
+            Constructor&lt;? extends PluginLoader&gt; constructor;
+
+            try {
+                constructor = loader.getConstructor(Server.class);
+                instance = constructor.newInstance(server);
+            } catch (NoSuchMethodException ex) {
+                String className = loader.getName();
+
+                throw new IllegalArgumentException(String.format(&quot;Class %s does not have a public %s(Server) constructor&quot;, className, className), ex);
+            } catch (Exception ex) {
+                throw new IllegalArgumentException(String.format(&quot;Unexpected exception %s while attempting to construct a new instance of %s&quot;, ex.getClass().getName(), loader.getName()), ex);
+            }
+        } else {
+            throw new IllegalArgumentException(String.format(&quot;Class %s does not implement interface PluginLoader&quot;, loader.getName()));
+        }
+
+        Pattern[] patterns = instance.getPluginFileFilters();
+
+        synchronized (this) {
+            for (Pattern pattern : patterns) {
+                fileAssociations.put(pattern, instance);
+            }
+        }
+    }
+}
+</code></pre>
+<p>这一步<code>SimplePluginManager</code> 负责 new 出 <code>JavaPluginLoader</code> 的实例，并且将插件名字过滤正则与 <code>JavaPluginLoader</code> 实例对应。（默认情况下 <code>PluginLoader</code> 接口仅有一个实现类 <code>JavaPluginLoader</code>）</p>
+<pre><code class="java">public final class JavaPluginLoader implements PluginLoader {
+    private final Pattern[] fileFilters = [Pattern.compile(&quot;\\.jar$&quot;)];
+}
+</code></pre>
+<p> <code>JavaPluginLoader</code> 只含有一个正则表达式，用于过滤插件文件夹中的文件。<br>接着，<code>CraftServer</code> 会调用 <code>SimplePluginManager</code> 的 <code>loadPlugins(File)</code> 方法。</p>
+<pre><code class="java">    public Plugin[] loadPlugins(File directory) {
+        Validate.notNull(directory, &quot;Directory cannot be null&quot;);
+        Validate.isTrue(directory.isDirectory(), &quot;Directory must be a directory&quot;);
+
+        List&lt;Plugin&gt; result = new ArrayList&lt;Plugin&gt;();
+        Set&lt;Pattern&gt; filters = fileAssociations.keySet();
+
+        if (!(server.getUpdateFolder().equals(&quot;&quot;))) {
+            updateDirectory = new File(directory, server.getUpdateFolder());
+        }
+
+        Map&lt;String, File&gt; plugins = new HashMap&lt;String, File&gt;();
+        Set&lt;String&gt; loadedPlugins = new HashSet&lt;String&gt;();
+        Map&lt;String, Collection&lt;String&gt;&gt; dependencies = new HashMap&lt;String, Collection&lt;String&gt;&gt;();
+        Map&lt;String, Collection&lt;String&gt;&gt; softDependencies = new HashMap&lt;String, Collection&lt;String&gt;&gt;();
+
+        // This is where it figures out all possible plugins
+        for (File file : directory.listFiles()) {
+            PluginLoader loader = null;
+            for (Pattern filter : filters) {
+                Matcher match = filter.matcher(file.getName());
+                if (match.find()) {
+                    loader = fileAssociations.get(filter);
+                }
+            }
+
+            if (loader == null) continue;
+
+            PluginDescriptionFile description = null;
+            try {
+                description = loader.getPluginDescription(file);
+                String name = description.getName();
+                if (name.equalsIgnoreCase(&quot;bukkit&quot;) || name.equalsIgnoreCase(&quot;minecraft&quot;) || name.equalsIgnoreCase(&quot;mojang&quot;)) {
+                    server.getLogger().log(Level.SEVERE, &quot;Could not load &#39;&quot; + file.getPath() + &quot;&#39; in folder &#39;&quot; + directory.getPath() + &quot;&#39;: Restricted Name&quot;);
+                    continue;
+                } else if (description.rawName.indexOf(&#39; &#39;) != -1) {
+                    server.getLogger().log(Level.SEVERE, &quot;Could not load &#39;&quot; + file.getPath() + &quot;&#39; in folder &#39;&quot; + directory.getPath() + &quot;&#39;: uses the space-character (0x20) in its name&quot;);
+                    continue;
+                }
+            } catch (InvalidDescriptionException ex) {
+                server.getLogger().log(Level.SEVERE, &quot;Could not load &#39;&quot; + file.getPath() + &quot;&#39; in folder &#39;&quot; + directory.getPath() + &quot;&#39;&quot;, ex);
+                continue;
+            }
+
+            File replacedFile = plugins.put(description.getName(), file);
+            if (replacedFile != null) {
+                server.getLogger().severe(String.format(
+                    &quot;Ambiguous plugin name `%s&#39; for files `%s&#39; and `%s&#39; in `%s&#39;&quot;,
+                    description.getName(),
+                    file.getPath(),
+                    replacedFile.getPath(),
+                    directory.getPath()
+                ));
+            }
+        //省去通过依赖分析来决定加载顺序。
+        return result.toArray(new Plugin[result.size()]);
+    }
+
+</code></pre>
+<p>该方法会找到目录下所有 jar 文件，并调用 <code>JavaPluginLoader</code> 的 <code>getPluginDescription(File)</code> 方法，找到目录下所有插件的描述文件。下一步会根据 <code>softDependency</code> 和 <code>dependency</code> 处理各个插件的加载顺序，并进行一系列的合法性校验，并对每个合法文件调用 <code>loadPlugin(File)</code> 方法。</p>
+<pre><code class="java">public final class SimplePluginManager implements PluginManager {
+    public synchronized Plugin loadPlugin(File file) throws InvalidPluginException, UnknownDependencyException {
+        Validate.notNull(file, &quot;File cannot be null&quot;);
+
+        checkUpdate(file);
+
+        Set&lt;Pattern&gt; filters = fileAssociations.keySet();
+        Plugin result = null;
+
+    for (Pattern filter : filters) {
+        String name = file.getName();
+        Matcher match = filter.matcher(name);
+
+        if (match.find()) {
+            PluginLoader loader = fileAssociations.get(filter);
+
+            result = loader.loadPlugin(file);
+        }
+    }
+
+    if (result != null) {
+        plugins.add(result);
+        lookupNames.put(result.getDescription().getName(), result);
+    }
+
+    return result;
+}
+</code></pre>
+<p>当正则匹配时，方法调用了 <code>fileAssociations</code> 中存的 loader，也就是 <code>JavaPluginLoader</code> 的 <code>loadPlugin(File)</code> 方法。</p>
+<pre><code class="java">public final class JavaPluginLoader implements PluginLoader {
+    public Plugin loadPlugin(final File file) throws InvalidPluginException {
+        Validate.notNull(file, &quot;File cannot be null&quot;);
+
+        if (!file.exists()) {
+            throw new InvalidPluginException(new FileNotFoundException(file.getPath() + &quot; does not exist&quot;));
+        }
+
+        final PluginDescriptionFile description;
+        try {
+            description = getPluginDescription(file);
+        } catch (InvalidDescriptionException ex) {
+            throw new InvalidPluginException(ex);
+        }
+
+        final File parentFile = file.getParentFile();
+        final File dataFolder = new File(parentFile, description.getName());
+        @SuppressWarnings(&quot;deprecation&quot;)
+        final File oldDataFolder = new File(parentFile, description.getRawName());
+
+        // Found old data folder
+        if (dataFolder.equals(oldDataFolder)) {
+            // They are equal -- nothing needs to be done!
+        } else if (dataFolder.isDirectory() &amp;&amp; oldDataFolder.isDirectory()) {
+            server.getLogger().warning(String.format(
+                &quot;While loading %s (%s) found old-data folder: `%s&#39; next to the new one `%s&#39;&quot;,
+                description.getFullName(),
+                file,
+                oldDataFolder,
+                dataFolder
+            ));
+        } else if (oldDataFolder.isDirectory() &amp;&amp; !dataFolder.exists()) {
+            if (!oldDataFolder.renameTo(dataFolder)) {
+                throw new InvalidPluginException(&quot;Unable to rename old data folder: `&quot; + oldDataFolder + &quot;&#39; to: `&quot; + dataFolder + &quot;&#39;&quot;);
+            }
+            server.getLogger().log(Level.INFO, String.format(
+                &quot;While loading %s (%s) renamed data folder: `%s&#39; to `%s&#39;&quot;,
+                description.getFullName(),
+                file,
+                oldDataFolder,
+                dataFolder
+            ));
+        }
+
+        if (dataFolder.exists() &amp;&amp; !dataFolder.isDirectory()) {
+            throw new InvalidPluginException(String.format(
+                &quot;Projected datafolder: `%s&#39; for %s (%s) exists and is not a directory&quot;,
+                dataFolder,
+                description.getFullName(),
+                file
+            ));
+        }
+
+        for (final String pluginName : description.getDepend()) {
+            Plugin current = server.getPluginManager().getPlugin(pluginName);
+
+            if (current == null) {
+                throw new UnknownDependencyException(pluginName);
+            }
+        }
+
+        final PluginClassLoader loader;
+        try {
+            loader = new PluginClassLoader(this, getClass().getClassLoader(), description, dataFolder, file);
+        } catch (InvalidPluginException ex) {
+            throw ex;
+        } catch (Throwable ex) {
+            throw new InvalidPluginException(ex);
+        }
+
+        loaders.add(loader);
+
+        return loader.plugin;
+    }
+}
+</code></pre>
+<p>这里对插件数据文件夹进行诸如创建之类的操作，并且检测当前插件的依赖是否全部已经被加载。接下来最重要的一步为 new 出 <code>PluginClassLoader</code>。</p>
+<pre><code class="java">final class PluginClassLoader extends URLClassLoader {
+    PluginClassLoader(final JavaPluginLoader loader, final ClassLoader parent, final PluginDescriptionFile description, final File dataFolder, final File file) throws IOException, InvalidPluginException, MalformedURLException {
+        super(new URL[] {file.toURI().toURL()}, parent);
+        Validate.notNull(loader, &quot;Loader cannot be null&quot;);
+
+        this.loader = loader;
+        this.description = description;
+        this.dataFolder = dataFolder;
+        this.file = file;
+        this.jar = new JarFile(file);
+        this.manifest = jar.getManifest();
+        this.url = file.toURI().toURL();
+
+        try {
+            Class&lt;?&gt; jarClass;
+            try {
+                jarClass = Class.forName(description.getMain(), true, this);
+            } catch (ClassNotFoundException ex) {
+                throw new InvalidPluginException(&quot;Cannot find main class `&quot; + description.getMain() + &quot;&#39;&quot;, ex);
+            }
+
+            Class&lt;? extends JavaPlugin&gt; pluginClass;
+            try {
+                pluginClass = jarClass.asSubclass(JavaPlugin.class);
+            } catch (ClassCastException ex) {
+                throw new InvalidPluginException(&quot;main class `&quot; + description.getMain() + &quot;&#39; does not extend JavaPlugin&quot;, ex);
+            }
+
+            plugin = pluginClass.newInstance();
+        } catch (IllegalAccessException ex) {
+            throw new InvalidPluginException(&quot;No public constructor&quot;, ex);
+        } catch (InstantiationException ex) {
+            throw new InvalidPluginException(&quot;Abnormal plugin type&quot;, ex);
+        }
+    }
+}
+</code></pre>
+<p><code>PluginClassLoader</code> 构造器中校验插件主类，并使用反射在本类加载器下创建实例。</p>
+<pre><code class="java">public abstract class JavaPlugin extends PluginBase {
+    public JavaPlugin() {
+    final ClassLoader classLoader = this.getClass().getClassLoader();
+    if (!(classLoader instanceof PluginClassLoader)) {
+            throw new IllegalStateException(&quot;JavaPlugin requires &quot; + PluginClassLoader.class.getName());
+        }
+        ((PluginClassLoader) classLoader).initialize(this);
+    }
+}
+</code></pre>
+<p>在 <code>JavaPlugin</code> 的构造器中，其调用了 <code>PluginClassLoader</code> 的 <code>initialize(JavaPlugin)</code> 方法。</p>
+<pre><code class="java">final class PluginClassLoader extends URLClassLoader {
+    synchronized void initialize(JavaPlugin javaPlugin) {
+        Validate.notNull(javaPlugin, &quot;Initializing plugin cannot be null&quot;);
+        Validate.isTrue(javaPlugin.getClass().getClassLoader() == this, &quot;Cannot initialize plugin outside of this class loader&quot;);
+        if (this.plugin != null || this.pluginInit != null) {
+            throw new IllegalArgumentException(&quot;Plugin already initialized!&quot;, pluginState);
+        }
+
+        pluginState = new IllegalStateException(&quot;Initial initialization&quot;);
+        this.pluginInit = javaPlugin;
+
+        javaPlugin.init(loader, loader.server, description, dataFolder, file, this);
+    }
+}
+</code></pre>
+<p><del>为了便于抛出异常，<code>pluginState</code> 成员听起来像是枚举的类型，可它实际是是 <code>IllegalArgumentException</code>，我觉得布星。</del><br>这里 <code>initialize(JavaPlugin)</code> 又调用了 <code>JavaPlugin</code> 的init(PluginLoader, Server, PluginDescriptionFile, File, File, ClassLoader)</p>
+<pre><code class="java">public abstract class JavaPlugin extends PluginBase {
+    final void init(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file, ClassLoader classLoader) {
+        this.loader = loader;
+        this.server = server;
+        this.file = file;
+        this.description = description;
+        this.dataFolder = dataFolder;
+        this.classLoader = classLoader;
+        this.configFile = new File(dataFolder, &quot;config.yml&quot;);
+        this.logger = new PluginLogger(this);
+    }
+}
+</code></pre>
+<p>该方法传入了一些参数，供插件编写者使用。至此，一个插件就加载好了。</p>
+<h2 id="大雾"><a href="#大雾" class="headerlink" title="大雾"></a>大雾</h2><p><del>为了扣题表达</del> 了解一个插件是如何被加载后，我们可以从属于该插件代码内的任何一个实例获取插件主类的实例。直接上代码：</p>
+<pre><code class="java">class Jaba {
+    public static JavaPlugin jaba(Object object) {
+        ClassLoader classLoader = object.getClass().getClassLoader();
+        try {
+            Class&lt;?&gt; loaderClass = Class.forName(&quot;org.bukkit.plugin.java.PluginClassLoader&quot;);
+            if(!loaderClass.isInstance(classLoader))
+                throw new IllegalPluginAccessException();
+            Field pluginField = loaderClass.getField(&quot;plugin&quot;);
+            pluginField.setAccessible(true);
+            return (JavaPlugin) pluginField.get(classLoader);
+        } catch(ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalPluginAccessException(e.getMessage());
+        }
+    }
+}
+</code></pre>
+<p><del>至少 7 个月没写 Java 了，十分不习惯。</del> 万恶的 <code>PluginClassLoader</code> 是 package-private 的，所以需要通过反射访问。只是这段代码是 100% 不可能用到的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如有错误，欢迎指出，毕竟我太菜了。</p>
+
         
     
 
@@ -450,6 +854,14 @@
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
+    
+        <a href="/2018/01/31/minecraft-dsl-event/" id="post_nav-older" class="next-content">
+            旧篇
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
     
 </nav>
 
@@ -622,6 +1034,14 @@ It will not impact the appearance and can give developers a lot of support :)
 </aside>
 
                     
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
 
                     
 
