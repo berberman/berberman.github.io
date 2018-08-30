@@ -234,7 +234,7 @@
 
     
         <meta property="article:published_time" content="Wed Jan 31 2018 10:08:43 GMT+0800">
-        <meta property="article:modified_time" content="Tue May 08 2018 00:06:42 GMT+0800">
+        <meta property="article:modified_time" content="Thu Aug 30 2018 11:22:50 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -257,7 +257,7 @@
     "mainEntityOfPage": "http://www.berberman.cn/2018/01/31/minecraft-dsl-event/index.html",
     "headline": "Minecraft-Bukkit插件-DSL注册事件监听器",
     "datePublished": "Wed Jan 31 2018 10:08:43 GMT+0800",
-    "dateModified": "Tue May 08 2018 00:06:42 GMT+0800",
+    "dateModified": "Thu Aug 30 2018 11:22:50 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "berberman",
@@ -594,7 +594,12 @@
 }
 </code></pre>
 <p><code>event</code> 函数中直接写成了 <code>T.() -&gt; Unit</code> 并且 <code>apply(block)</code> 这个大括号的里面就相当于对应事件的类中，可以直接访问里面的公共成员。优先级上面定义了如果不声明默认是 <code>NORMAL</code>。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>说完了，就酱。垃圾代码 x2</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>还是说几个问题：</p>
+<ul>
+<li>无法动态注册、取消注册</li>
+<li>封装性欠缺</li>
+</ul>
+<p>同命令部分，大家可以自行摸索或参考一下 <a href="https://github.com/berberman/emerald" target="_blank" rel="noopener">emerald</a> 中的 <a href="https://github.com/berberman/emerald/tree/master/common/src/cn/berberman/emerald/event" target="_blank" rel="noopener">部分</a>。</p>
 
         
     
@@ -721,7 +726,7 @@
             </a>
             <ul class="dropdown-menu">
             <li>
-                <a class="sidebar_archives-link" href="/archives/2018/05/">五月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/01/">一月 2018<span class="sidebar_archives-count">3</span></a>
+                <a class="sidebar_archives-link" href="/archives/2018/05/">五月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/01/">一月 2018<span class="sidebar_archives-count">2</span></a>
             </ul>
         </li>
         
