@@ -3,6 +3,27 @@
   
     
     <entry>
+      <title>对内可变对外不可变的 List</title>
+      <link href="/2018/10/13/immutable-list/"/>
+      <url>/2018/10/13/immutable-list/</url>
+      <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在许多场景中都需要有一个内部的容器来储存数据，这个容器对内部是可变的，但可以从外部获取。举给栗子：</p><pre><code class="kotlin">class Multicast {    val connections = mutableListOf&lt;String&gt;()}</code></pre><p>这是一个组播节点，其中持有着其他节点的名字。此时内部实现中需要对 <code>connections</code> 进行增加、移除元素等操作，而外部只能获取这个容器，不能够修改这个容器的内容。</p><p><del><strong>看这愚蠢的高亮，不能识别 <code>val</code>。</strong></del></p><h2 id="Ver-1"><a href="#Ver-1" class="headerlink" title="Ver. 1"></a>Ver. 1</h2><pre><code class="kotlin">class MulticastA {    private val _connections = mutableListOf&lt;String&gt;()    val connections: List&lt;String&gt;        get() = _connections}</code></pre><p>内部使用 <code>_connections</code> 可变列表进行修改，外部获取到的列表类型是不可变的 <code>List</code>。好的，问题解决了！不过稍等一下，我们思考另一个问题—— 把 <code>connections</code> 强转为 <code>MutableList&lt;String&gt;</code> 会发生什么呢？GG</p><h2 id="Ver-2"><a href="#Ver-2" class="headerlink" title="Ver. 2"></a>Ver. 2</h2><pre><code class="kotlin">class MulticastB {    private val _connections = mutableListOf&lt;String&gt;()    val connections        get() = _connections.toList()}</code></pre><p>既然每次获取到的都是原来可变列表的引用，我们 clone 一下不就好了嘛。如果这样实现，每次外部访问时都会创建一个新的 —— 访问次数多到智熄时，会有 n 个列表被创建出来，我觉得布星。</p><h2 id="Ver-3"><a href="#Ver-3" class="headerlink" title="Ver. 3"></a>Ver. 3</h2><pre><code class="kotlin">class MulticastC {    var connections = listOf&lt;String&gt;()        private set}</code></pre><blockquote><p>可变太辣鸡了，会有各种问题，我们不如。。。</p></blockquote><p>这样虽然解决了问题，内部可以修改变量 <code>connections</code> 的引用，且外部只能访问。然而，每次修改数据都需要创建一个新的 <code>List</code>，这并不是很柯学。</p><h2 id="Ver-final"><a href="#Ver-final" class="headerlink" title="Ver. final"></a>Ver. final</h2><pre><code class="kotlin">class MulticastD {    private val _connections = mutableListOf&lt;String&gt;()    val connections = object : List&lt;String&gt; by _connections {}}</code></pre><p>通过建立匿名实例继承 <code>List&lt;String&gt;</code> 不可变接口，将实现委托给可变列表 <code>_connections</code>，使用不可变列表接口来约定可变列表的行为。这样没有创建许多不必要的实例，也不必使用不可变来解决问题。</p>]]></content>
+      
+      <categories>
+          
+          <category> Kotlin </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 编程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Minecraft-Bukkit插件-插件类加载器</title>
       <link href="/2018/05/08/minecraft-plugin-classloader/"/>
       <url>/2018/05/08/minecraft-plugin-classloader/</url>
