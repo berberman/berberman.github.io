@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'CascadiaCode';
+  src: url("../font/CascadiaCode/CascadiaCode.woff2") format('woff2'), url("../font/CascadiaCode/CascadiaCode.ttf") format('truetype'), url("../font/CascadiaCode/CascadiaCode.otf") format('opentype');
+}
 /* normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
 html {
   font-family: sans-serif;
@@ -367,7 +371,7 @@ h6 {
   padding: 0 !important;
 }
 .highlight pre * {
-  font-family: 'Segoe UI', monospace, Consolas, Monaco, Menlo, 'Microsoft YaHei', sans-serif !important;
+  font-family: CascadiaCode !important;
 }
 .highlight .gutter {
   width: 10px;
@@ -1374,7 +1378,7 @@ body.under {
 .archive .archive-post .archive-post-content code {
   background-color: rgba(253,153,153,0.1);
   color: #654040;
-  font-family: 'Segoe UI', monospace, Consolas, Monaco, Menlo, 'Microsoft YaHei', sans-serif;
+  font-family: CascadiaCode;
   margin: 0 4px;
   padding: 0 4px;
 }
