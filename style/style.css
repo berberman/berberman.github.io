@@ -508,7 +508,7 @@ h6 {
 .highlight.kotlin:after {
   content: "Kotlin";
 }
-.highlight.hs:after {
+.highlight.haskell:after {
   content: "Haskell";
 }
 .highlight.toml:after {

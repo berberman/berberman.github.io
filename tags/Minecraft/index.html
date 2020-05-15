@@ -241,16 +241,6 @@
 
 <p>就可以正常食用了。如果不通过注解反射实现呢？我们需要翻一下源码，看看他的底层是怎么实现的。</p>
 <h2 id="Bukkit-源码部分"><a href="#Bukkit-源码部分" class="headerlink" title="Bukkit 源码部分"></a>Bukkit 源码部分</h2><p>可以在 <a href="https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/browse" target="_blank" rel="noopener">Bukkit</a> 这里找到它的源码。拿到源码后我们从 <code>registerEvents</code> 这里入手，看看它帮我们干了什么不可描述的事情。<code>PluginManager</code> 是个接口，需要到它的实现类 <code>SimplePluginManager</code> 中找。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerEvents</span><span class="params">(Listener listener, Plugin plugin)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//...省略那个插件是否启用的判断</span></span><br><span class="line">       <span class="keyword">for</span> (Map.Entry&lt;Class&lt;? extends Event&gt;, Set&lt;RegisteredListener&gt;&gt; entry :</span><br><span class="line">        plugin.getPluginLoader().createRegisteredListeners(listener, plugin).entrySet()) &#123;</span><br><span class="line">           getEventListeners(getRegistrationClass(entry.getKey()))</span><br><span class="line">           .registerAll(entry.getValue());</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以看到关键在于掉用了 <code>createRegisteredListeners</code> 这个方法，然后把 <code>RegisteredListeners</code> 和 <code>Event</code> 对应交给 <code>HandlerList</code> 处理。（<code>createRegisteredListeners</code> 是 <code>PluginLoader</code> 接口的方法）同样，我们需要找他的实现类 <code>JavaPluginLoader</code>。这个方法有 87 行，这里简述一下其才做流程：</p>
-<ul>
-<li>拿到 <code>Listener</code> 实例后，用反射找里面的 <code>Method</code>；</li>
-<li>找到 Method 后检验是否符合注册的标准，并且拿到其注解 <code>@EventHandler</code> 中的优先级；</li>
-<li>对于被标注 <code>@Deprecated</code> 并符合要求的方法要在 logger 中打印出来，提醒使用者；</li>
-<li>建立一个 <code>EventExecutor</code> 接口的匿名类实例，将方法 <code>execute</code> 重写，在其中调用反射找来的方法 (<code>method.invoke(listener, event)</code>)；</li>
-<li>根据 <code>useTimings</code> 分别new 出 <code>TimedRegisteredListener</code> 或 <code>RegisteredListener</code>，并把它们加到与 <code>Event</code> 对应的 Map 中。</li>
-</ul>
             
           </div>
           <div class="archive-post-info">
@@ -339,6 +329,10 @@
       <button>Minecraft</button>
     </div>
   
+    <div class="tagcloud-tag">
+      <button>Haskell</button>
+    </div>
+  
   </div>
   
     <div class="tagcloud-postlist active">
@@ -362,6 +356,18 @@
           <a href="/2018/05/08/minecraft-plugin-classloader/">
             <time class="tagcloud-posttime">2018 / 05 / 08</time>
             <span>Minecraft-Bukkit插件-插件类加载器</span>
+          </a>
+        </div>
+      
+    </div>
+  
+    <div class="tagcloud-postlist ">
+      <h2>Haskell</h2>
+      
+        <div class="tagcloud-post">
+          <a href="/2020/02/11/type-families-and-pokemon/">
+            <time class="tagcloud-posttime">2020 / 02 / 11</time>
+            <span>类型家族与精灵宝可梦</span>
           </a>
         </div>
       
