@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="berberman's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+
+  <link rel="apple-touch-icon"  sizes="72x72"  href="assets/favicon.ico">
+  <link rel="apple-touch-icon-precomposed"  sizes="72x72"  href="assets/favicon.ico">
+
+
+
+
+  <meta name="keywords" content="berberman" />
+
+
+
+<link rel="apple-touch-startup-image" media="(device-width: 375px)" href="assets/apple-launch-1125x2436.png">
+<link rel="apple-touch-startup-image" media="(orientation: landscape)" href="assets/apple-touch-startup-image-2048x1496.png">
+
+<link rel="stylesheet" href="/style/style.css">
+
+<script>
+  var nlviconfig = {
+    title: "berberman's Blog",
+    author: "berberman",
+    baseUrl: "/",
+    theme: {
+      scheme: "banderole",
+      lightbox: false,
+      animate: false,
+      search: true,
+      friends: false,
+      reward: false,
+      pjax: true,
+      lazy: false,
+      toc: true
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+    <link rel="icon" href="assets/favicon.ico">
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+@font-face {
+  font-family: "Allura";
+  src: url('/font/allura/allura.ttf');
+}
+</style>
+
+  <title>
+  
+    Minecraft · berberman's Blog
+  
+</title>
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+  <div class="container">
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn" style="display:none;">
+    <h1><a href="/">berberman's Blog</a></h1>
+    
+  </div>
+</div>
+
+    <nav class="main-nav">
+  
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search-btn" aria-label="Search">
+        <i class="iconfont icon-search"></i>
+      </a>
+    </li>
+  
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">
+          
+            ARTICLE
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">
+          
+            ARCHIVES
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">
+          
+            TAGS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+  </ul>
+  
+</nav>
+
+  </div>
+</header>
+<div class="mobile-header" id="mobile-header">
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <div class="header-menu-line"></div>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">berberman's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+  <div class="mobile-header-body">
+    <ul class="mobile-header-list">
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-0">
+          <a href="/" >
+            
+              ARTICLE
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-1">
+          <a href="/archives" >
+            
+              ARCHIVES
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-2">
+          <a href="javascript:;" id="mobile-tags">
+            
+              TAGS
+            
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+    <div class="container-inner" style="display:none;">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  <div class="archive syuanpi fadeInRightShort" id="archive">
+    
+      
+      
+        
+          </section>
+        
+        <div class="archive-post">
+          <div class="archive-post-content">
+            
+              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在开发 Bukkit 插件库的过程中，有时会需要用到插件主类实例的情况。举一个栗子：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">registerEventListeners(<span class="keyword">this</span>) &#123;</span><br><span class="line">	event&lt;PlayerJoinEvent&gt; &#123;</span><br><span class="line">		player.sendMessage(<span class="string">"Hello!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为事件监听器的注册需要绑定在插件上，对于库/前置插件开发者来说，需要每次用到插件实例时让调用者提供。看起来没什么不对的，但这里有一个更好的方法。我们先来分析下插件是如何加载的。</p>
+<h2 id="插件注册分析"><a href="#插件注册分析" class="headerlink" title="插件注册分析"></a>插件注册分析</h2><p>服务器插件的加载是由 <code>CraftServer</code> 的 <code>loadPlugins</code> 开始的。</p>
+            
+          </div>
+          <div class="archive-post-info">
+            <time class="archive-post-time">
+              2018-05-08
+            </time>
+            <a  class="archive-post-link" href="/2018/05/08/minecraft-plugin-classloader/">
+              Minecraft-Bukkit插件-插件类加载器
+            </a>
+          </div>
+        </div>
+      
+        
+          </section>
+        
+        <div class="archive-post">
+          <div class="archive-post-content">
+            
+              <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上次介绍了如何在 Kotlin 语言中使用 DSL 构造注册命令，这篇来写一下注册事件监听器。</p>
+<p>注册监听器通常情况下都是用 <code>@EventHandler</code> 标注一个方法，写在一个实现空接口 <code>Listener</code> 的类中，像这样：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">object</span> DemoListener : Listener &#123;</span><br><span class="line">	<span class="meta">@EventHandler</span></span><br><span class="line">	<span class="function"><span class="keyword">fun</span> <span class="title">onPlayJoin</span><span class="params">(event: <span class="type">PlayerJoinEvent</span>)</span></span> &#123;</span><br><span class="line">		event.player.sendMessage(ChatColor.AQUA + <span class="string">"Hi!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在插件启动时写上：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pluginManager.registerEvents(DemoListener, plugin)</span><br></pre></td></tr></table></figure>
+
+<p>就可以正常食用了。如果不通过注解反射实现呢？我们需要翻一下源码，看看他的底层是怎么实现的。</p>
+<h2 id="Bukkit-源码部分"><a href="#Bukkit-源码部分" class="headerlink" title="Bukkit 源码部分"></a>Bukkit 源码部分</h2><p>可以在 <a href="https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/browse" target="_blank" rel="noopener">Bukkit</a> 这里找到它的源码。拿到源码后我们从 <code>registerEvents</code> 这里入手，看看它帮我们干了什么不可描述的事情。<code>PluginManager</code> 是个接口，需要到它的实现类 <code>SimplePluginManager</code> 中找。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerEvents</span><span class="params">(Listener listener, Plugin plugin)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//...省略那个插件是否启用的判断</span></span><br><span class="line">       <span class="keyword">for</span> (Map.Entry&lt;Class&lt;? extends Event&gt;, Set&lt;RegisteredListener&gt;&gt; entry :</span><br><span class="line">        plugin.getPluginLoader().createRegisteredListeners(listener, plugin).entrySet()) &#123;</span><br><span class="line">           getEventListeners(getRegistrationClass(entry.getKey()))</span><br><span class="line">           .registerAll(entry.getValue());</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到关键在于掉用了 <code>createRegisteredListeners</code> 这个方法，然后把 <code>RegisteredListeners</code> 和 <code>Event</code> 对应交给 <code>HandlerList</code> 处理。（<code>createRegisteredListeners</code> 是 <code>PluginLoader</code> 接口的方法）同样，我们需要找他的实现类 <code>JavaPluginLoader</code>。这个方法有 87 行，这里简述一下其才做流程：</p>
+<ul>
+<li>拿到 <code>Listener</code> 实例后，用反射找里面的 <code>Method</code>；</li>
+<li>找到 Method 后检验是否符合注册的标准，并且拿到其注解 <code>@EventHandler</code> 中的优先级；</li>
+<li>对于被标注 <code>@Deprecated</code> 并符合要求的方法要在 logger 中打印出来，提醒使用者；</li>
+<li>建立一个 <code>EventExecutor</code> 接口的匿名类实例，将方法 <code>execute</code> 重写，在其中调用反射找来的方法 (<code>method.invoke(listener, event)</code>)；</li>
+<li>根据 <code>useTimings</code> 分别new 出 <code>TimedRegisteredListener</code> 或 <code>RegisteredListener</code>，并把它们加到与 <code>Event</code> 对应的 Map 中。</li>
+</ul>
+            
+          </div>
+          <div class="archive-post-info">
+            <time class="archive-post-time">
+              2018-01-31
+            </time>
+            <a  class="archive-post-link" href="/2018/01/31/minecraft-dsl-event/">
+              Minecraft-Bukkit插件-DSL注册事件监听器
+            </a>
+          </div>
+        </div>
+      
+        
+          </section>
+        
+        <div class="archive-post">
+          <div class="archive-post-content">
+            
+              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在食用本文前你需要了解 Kotlin语言，及用到的特性——带接收者的 lambda、内联 reified 泛型函数、扩展函数、中缀函数等。当然这些大部分都是在 Kotlin 中想要写出 DSL 语言结构的必要知识。</p>
+<h2 id="DSL-构造命令"><a href="#DSL-构造命令" class="headerlink" title="DSL 构造命令"></a>DSL 构造命令</h2><p>关于注册命令的写法大部分都是远古判断法或者注解反射法。关于注解反射这个东西，虽然外表看起来简洁美观，但背后十分邪恶，我个人也非常不喜欢。因此我们从 <code>CommandMap</code> 注册命令开始入手。<br>首先需要拿到 <code>CommandMap</code>，它位于 <code>Server</code> 类中。</p>
+            
+          </div>
+          <div class="archive-post-info">
+            <time class="archive-post-time">
+              2018-01-30
+            </time>
+            <a  class="archive-post-link" href="/2018/01/30/minecraft-dsl-command/">
+              Minecraft-Bukkit插件-DSL注册命令
+            </a>
+          </div>
+        </div>
+      
+      
+        </section></section>
+      
+  </div>
+  
+  <nav class="pagination">
+      <span class="page-number current">1</span>
+  </nav>
+
+
+
+
+        </div>
+      </main>
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+  
+  
+</div>
+
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2020</span>
+        <span>❤</span>
+        <span>berberman</span>
+    </div>
+    <div class="theme">
+        <span>
+            动力来源于
+            <a href="http://hexo.io/" target="_blank" rel="noopener">Hexo </a>
+        </span>
+        <span>
+            主题
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi" target="_blank" rel="noopener"> Nlvi </a>
+        </span>
+    </div>
+    
+</div>
+
+    </div>
+  </div>
+</footer>
+    </div>
+    <div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-taglist">
+  
+    <div class="tagcloud-tag">
+      <button>Minecraft</button>
+    </div>
+  
+  </div>
+  
+    <div class="tagcloud-postlist active">
+      <h2>Minecraft</h2>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/30/minecraft-dsl-command/">
+            <time class="tagcloud-posttime">2018 / 01 / 30</time>
+            <span>Minecraft-Bukkit插件-DSL注册命令</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/31/minecraft-dsl-event/">
+            <time class="tagcloud-posttime">2018 / 01 / 31</time>
+            <span>Minecraft-Bukkit插件-DSL注册事件监听器</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/05/08/minecraft-plugin-classloader/">
+            <time class="tagcloud-posttime">2018 / 05 / 08</time>
+            <span>Minecraft-Bukkit插件-插件类加载器</span>
+          </a>
+        </div>
+      
+    </div>
+  
+</div>
+
+  </div>
+  <div class="backtop syuanpi melt toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+  <div class="search" id="search">
+    <div class="input">
+      <input type="text" id="search-input" placeholder="搜索一下？" autofocus>
+    </div>
+    <div id="search-result"></div>
+  </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.7/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+
+
+
+
+  
+<script src="/script/lib/pjax/pjax.js"></script>
+
+
+
+
+  
+<script src="/script/scheme/banderole.js"></script>
+
+
+
+
+<script src="/script/bootstarp.js"></script>
+
+
+
+
+
+</body>
+</html>

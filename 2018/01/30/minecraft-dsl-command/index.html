@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="berberman's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+
+  <link rel="apple-touch-icon"  sizes="72x72"  href="assets/favicon.ico">
+  <link rel="apple-touch-icon-precomposed"  sizes="72x72"  href="assets/favicon.ico">
+
+
+
+
+  <meta name="keywords" content="berberman" />
+
+
+  <meta name="keywords" content="Minecraft, nlvi" />
+
+
+<link rel="apple-touch-startup-image" media="(device-width: 375px)" href="assets/apple-launch-1125x2436.png">
+<link rel="apple-touch-startup-image" media="(orientation: landscape)" href="assets/apple-touch-startup-image-2048x1496.png">
+
+<link rel="stylesheet" href="/style/style.css">
+
+<script>
+  var nlviconfig = {
+    title: "berberman's Blog",
+    author: "berberman",
+    baseUrl: "/",
+    theme: {
+      scheme: "banderole",
+      lightbox: false,
+      animate: false,
+      search: true,
+      friends: false,
+      reward: false,
+      pjax: true,
+      lazy: false,
+      toc: true
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+    <link rel="icon" href="assets/favicon.ico">
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+@font-face {
+  font-family: "Allura";
+  src: url('/font/allura/allura.ttf');
+}
+</style>
+
+  <title> Minecraft-Bukkit插件-DSL注册命令 · berberman's Blog </title>
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+  <div class="container">
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn" style="display:none;">
+    <h1><a href="/">berberman's Blog</a></h1>
+    
+  </div>
+</div>
+
+    <nav class="main-nav">
+  
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search-btn" aria-label="Search">
+        <i class="iconfont icon-search"></i>
+      </a>
+    </li>
+  
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">
+          
+            ARTICLE
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">
+          
+            ARCHIVES
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">
+          
+            TAGS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+  </ul>
+  
+</nav>
+
+  </div>
+</header>
+<div class="mobile-header" id="mobile-header">
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <div class="header-menu-line"></div>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">berberman's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+  <div class="mobile-header-body">
+    <ul class="mobile-header-list">
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-0">
+          <a href="/" >
+            
+              ARTICLE
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-1">
+          <a href="/archives" >
+            
+              ARCHIVES
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-2">
+          <a href="javascript:;" id="mobile-tags">
+            
+              TAGS
+            
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+    <div class="container-inner" style="display:none;">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi fadeInRightShort back-1">
+        <div class="post-time-wrapper">
+          
+          <time>2018-01-30</time>
+          
+        </div>
+      </div>
+      <h2 class="post-title syuanpi fadeInRightShort back-2">
+        
+          Minecraft-Bukkit插件-DSL注册命令
+        
+      </h2>
+    </header>
+    <div class="post-content syuanpi fadeInRightShort back-3">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在食用本文前你需要了解 Kotlin语言，及用到的特性——带接收者的 lambda、内联 reified 泛型函数、扩展函数、中缀函数等。当然这些大部分都是在 Kotlin 中想要写出 DSL 语言结构的必要知识。</p>
+<h2 id="DSL-构造命令"><a href="#DSL-构造命令" class="headerlink" title="DSL 构造命令"></a>DSL 构造命令</h2><p>关于注册命令的写法大部分都是远古判断法或者注解反射法。关于注解反射这个东西，虽然外表看起来简洁美观，但背后十分邪恶，我个人也非常不喜欢。因此我们从 <code>CommandMap</code> 注册命令开始入手。<br>首先需要拿到 <code>CommandMap</code>，它位于 <code>Server</code> 类中。</p>
+<a id="more"></a>
+
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getCommandMap</span><span class="params">()</span></span>: CommandMap =</span><br><span class="line">		Bukkit.getServer().let &#123;</span><br><span class="line">			it::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>.<span class="title">declaredMethods</span>.<span class="title">firstOrNull</span> </span>&#123; it.name == <span class="string">"getCommandMap"</span> &#125;</span><br><span class="line">					?.invoke(it) <span class="keyword">as</span> CommandMap</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<p>此处没有对非空做出处理，因为我们知道 <code>Server</code> 类中肯定是存在这个东西的。之后我们就要把抽象类 <code>Command</code> 给实现一下他的  <code>execute</code> 方法。在构造 DSL 过程中，我们把这个方法中执行的内容封装成一个 lambda <code>(CommandSender, String, Array&lt;out String&gt;) -&gt; Unit</code>，用 <code>result</code> 作为最终返回结果。我们定义一个类继承 <code>Command</code> ，并封装上下文及 <code>execute</code> 函数。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PackingCommand</span></span></span><br><span class="line">(name: String, description: String, usageMessage: String,</span><br><span class="line"> aliases: List&lt;String&gt;,</span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">val</span> action: (CommandSender, String, Array&lt;<span class="keyword">out</span> String&gt;) -&gt; <span class="built_in">Unit</span>,</span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">val</span> result: <span class="built_in">Boolean</span>) : Command(name, description, usageMessage, aliases)&#123;</span><br><span class="line">   <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">execute</span><span class="params">(p0: <span class="type">CommandSender</span>, p1: <span class="type">String</span>, p: <span class="type">Array</span>&lt;<span class="type">out</span> <span class="type">String</span>&gt;)</span></span> =</span><br><span class="line">      result.apply &#123; action(p0, p1, p) &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>name</code>、<code>description</code>、<code>usageMessage</code>、<code>aliases</code> 对应 plugin.yml 下对命令的配置；</li>
+<li><code>action</code> 会在 <code>execute</code> 被调用时执行</li>
+<li><code>result</code> 对应处理命令时返回的布尔结果（这里在 runtime 前已经固定）</li>
+</ul>
+<p>定义完 <code>PackingCommand</code> 后，可以实现其 DSL Builder。代码如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommandBuilderDsl</span></span>(<span class="keyword">val</span> name: String) &#123;</span><br><span class="line">    <span class="comment">//下面这些成员都带有默认值，因为每项不是必要的，包括 `action`。</span></span><br><span class="line">    <span class="keyword">var</span> action: (CommandSender, String, Array&lt;<span class="keyword">out</span> String&gt;) -&gt; <span class="built_in">Unit</span> =</span><br><span class="line">      &#123; _, _, _ -&gt; <span class="literal">true</span> &#125;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">set</span>   <span class="comment">//不让在外面修改，只能通过提供的函数赋值。</span></span><br><span class="line">	<span class="keyword">var</span> description: String = <span class="string">""</span></span><br><span class="line">	<span class="keyword">var</span> usageMessage: String = <span class="string">""</span></span><br><span class="line">	<span class="keyword">val</span> aliases: MutableList&lt;String&gt; = mutableListOf()</span><br><span class="line">	<span class="keyword">var</span> result: <span class="built_in">Boolean</span> = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">fun</span> <span class="title">action</span><span class="params">(block: (<span class="type">CommandSender</span>, <span class="type">String</span>, <span class="type">Array</span>&lt;<span class="type">out</span> <span class="type">String</span>&gt;) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">		action = block</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//这里多提供一种赋值方法，因为 `label` 和 `args` 有时候不需要使用，每次都要写</span></span><br><span class="line">    <span class="comment">// `&#123; sender, _, _ -&gt; &#125;` 太麻烦。</span></span><br><span class="line">	<span class="function"><span class="keyword">fun</span> <span class="title">action</span><span class="params">(block: (<span class="type">CommandSender</span>) -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">		action = &#123; sender, _, _ -&gt; block(sender) &#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">fun</span> <span class="title">addAlias</span><span class="params">(alias: <span class="type">String</span>)</span></span> = aliases.add(alias)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>写完 <code>CommandBuilderDsl</code> 后还需要提供一另一个 <code>CommandScope</code> 来构造 <code>Builder</code>，在这之前构造好的 <code>Command</code> 需要存起来，在插件启用时调用，这部分不贴代码了，就是一个 <code>MutableList&lt;PackingCommand&gt;</code>，向外提供注册方法。<code>CommandScope</code> 的代码如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommandScopeDsl</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">fun</span> <span class="title">command</span><span class="params">(name: <span class="type">String</span>, block: <span class="type">CommandBuilderDsl</span>.() -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">		CommandBuilderDsl(name).apply(block).apply &#123;</span><br><span class="line">			PackingCommand(<span class="keyword">this</span>.name, description, usageMessage, aliases, action, result)</span><br><span class="line">					.let(CommandHolder::add)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>目前 <code>CommandScope</code> 中就一个函数，也可以省略 <code>CommandScope</code>，直接将 <code>command()</code> 改为顶层函数，不过未来肯定还会加东西，而且这样写是不合理的。贴一下前面的注册方法，<code>commands</code> 是那个持有 <code>PackingCommand</code> 的 list：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">register</span><span class="params">(commandMap: <span class="type">CommandMap</span>)</span></span> &#123;</span><br><span class="line">		commands.forEach &#123;</span><br><span class="line">			commandMap.register(<span class="string">"DemoPlugin"</span>, it <span class="keyword">as</span> Command)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>再加上把 <code>CommandScope</code> 开放出来的函数：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">buildCommands</span><span class="params">(block: <span class="type">CommandScope</span>.() -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">	CommandScope().apply(block)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此就完成了，在插件启用时调用 <code>CommandHolder.register(getCommandMap())</code> 注册就好。<br>随便写个命令举个例子：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">buildCommands &#123;</span><br><span class="line">	command(<span class="string">"gg"</span>) &#123;</span><br><span class="line">		action &#123; sender -&gt;</span><br><span class="line">			sender.sendMessage(<span class="string">"233"</span>)</span><br><span class="line">			<span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	command(<span class="string">"..."</span>)&#123;</span><br><span class="line">		action&#123;sender-&gt;</span><br><span class="line">			<span class="comment">//...</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>有几个问题：</p>
+<ul>
+<li>命令多了看起来很乱，大括号越写越多</li>
+<li>封装性欠缺</li>
+<li>无法美观处理子命令</li>
+</ul>
+<p>除了第一个问题是 Kotlin DSL 的硬伤外，其余都可以自己慢慢优化、实现。<a href="https://github.com/berberman/emerald" target="_blank" rel="noopener">emerald</a> 主要思想来源于本文，可以在 <a href="https://github.com/berberman/emerald/tree/master/common/src/cn/berberman/emerald/command" target="_blank" rel="noopener">这里</a> 找到我进一步封装的代码。</p>
+
+      
+    
+    </div>
+    
+      <div class="post-tags syuanpi fadeInRightShort back-3">
+      
+        <a href="/tags/Minecraft/">Minecraft</a>
+      
+      </div>
+    
+    
+      
+
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>作者 :</span>
+      <span>berberman</span>
+    </div>
+    <div class="copy-url">
+      <span>地址 :</span>
+      <a href="https://berberman.cn/2018/01/30/minecraft-dsl-command/">https://berberman.cn/2018/01/30/minecraft-dsl-command/</a>
+    </div>
+    <div class="copy-origin">
+      <span>来源 :</span>
+      <a href="https://berberman.cn">https://berberman.cn</a>
+    </div>
+    <div class="copy-license">
+      
+      WTFPL
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+      <a href="/2018/01/31/minecraft-dsl-event/" id="art-left" class="art-left">
+        <span class="next-title">
+          <i class="iconfont icon-left"></i>Minecraft-Bukkit插件-DSL注册事件监听器
+        </span>
+      </a>
+    
+    
+  </nav>
+
+
+    
+  <i id="com-switch" class="iconfont icon-down jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+
+    
+    
+
+    
+
+  </div>
+
+
+
+  
+  
+    
+  
+  <aside class="post-toc">
+    <div class="title"><span>文章导航</span></div>
+    <div class="toc-inner">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DSL-构造命令"><span class="toc-text">DSL 构造命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </aside>
+
+
+
+  
+
+
+        </div>
+      </main>
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+  
+  
+</div>
+
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2020</span>
+        <span>❤</span>
+        <span>berberman</span>
+    </div>
+    <div class="theme">
+        <span>
+            动力来源于
+            <a href="http://hexo.io/" target="_blank" rel="noopener">Hexo </a>
+        </span>
+        <span>
+            主题
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi" target="_blank" rel="noopener"> Nlvi </a>
+        </span>
+    </div>
+    
+</div>
+
+    </div>
+  </div>
+</footer>
+    </div>
+    <div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-taglist">
+  
+    <div class="tagcloud-tag">
+      <button>Minecraft</button>
+    </div>
+  
+  </div>
+  
+    <div class="tagcloud-postlist active">
+      <h2>Minecraft</h2>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/30/minecraft-dsl-command/">
+            <time class="tagcloud-posttime">2018 / 01 / 30</time>
+            <span>Minecraft-Bukkit插件-DSL注册命令</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/31/minecraft-dsl-event/">
+            <time class="tagcloud-posttime">2018 / 01 / 31</time>
+            <span>Minecraft-Bukkit插件-DSL注册事件监听器</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/05/08/minecraft-plugin-classloader/">
+            <time class="tagcloud-posttime">2018 / 05 / 08</time>
+            <span>Minecraft-Bukkit插件-插件类加载器</span>
+          </a>
+        </div>
+      
+    </div>
+  
+</div>
+
+  </div>
+  <div class="backtop syuanpi melt toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+  <div class="search" id="search">
+    <div class="input">
+      <input type="text" id="search-input" placeholder="搜索一下？" autofocus>
+    </div>
+    <div id="search-result"></div>
+  </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.7/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+
+
+
+
+  
+<script src="/script/lib/pjax/pjax.js"></script>
+
+
+
+
+  
+<script src="/script/scheme/banderole.js"></script>
+
+
+
+
+<script src="/script/bootstarp.js"></script>
+
+
+
+<script>
+if (nlviconfig.theme.toc) {
+  setTimeout(function() {
+    if (nlviconfig.theme.scheme === 'balance') {
+      $("#header").addClass("show_toc");
+    } else if (nlviconfig.theme.scheme === 'banderole') {
+      $(".container-inner").addClass("has_toc");
+      $(".post-toc .title").addClass("show");
+      $(".toc-inner").addClass("show");
+    }
+  }, 1000);
+}
+</script>
+
+
+
+</body>
+</html>

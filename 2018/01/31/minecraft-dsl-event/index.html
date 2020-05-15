@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="berberman's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+
+  <link rel="apple-touch-icon"  sizes="72x72"  href="assets/favicon.ico">
+  <link rel="apple-touch-icon-precomposed"  sizes="72x72"  href="assets/favicon.ico">
+
+
+
+
+  <meta name="keywords" content="berberman" />
+
+
+  <meta name="keywords" content="Minecraft, nlvi" />
+
+
+<link rel="apple-touch-startup-image" media="(device-width: 375px)" href="assets/apple-launch-1125x2436.png">
+<link rel="apple-touch-startup-image" media="(orientation: landscape)" href="assets/apple-touch-startup-image-2048x1496.png">
+
+<link rel="stylesheet" href="/style/style.css">
+
+<script>
+  var nlviconfig = {
+    title: "berberman's Blog",
+    author: "berberman",
+    baseUrl: "/",
+    theme: {
+      scheme: "banderole",
+      lightbox: false,
+      animate: false,
+      search: true,
+      friends: false,
+      reward: false,
+      pjax: true,
+      lazy: false,
+      toc: true
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+    <link rel="icon" href="assets/favicon.ico">
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+@font-face {
+  font-family: "Allura";
+  src: url('/font/allura/allura.ttf');
+}
+</style>
+
+  <title> Minecraft-Bukkit插件-DSL注册事件监听器 · berberman's Blog </title>
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+  <div class="container">
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn" style="display:none;">
+    <h1><a href="/">berberman's Blog</a></h1>
+    
+  </div>
+</div>
+
+    <nav class="main-nav">
+  
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search-btn" aria-label="Search">
+        <i class="iconfont icon-search"></i>
+      </a>
+    </li>
+  
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">
+          
+            ARTICLE
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">
+          
+            ARCHIVES
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">
+          
+            TAGS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+  </ul>
+  
+</nav>
+
+  </div>
+</header>
+<div class="mobile-header" id="mobile-header">
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <div class="header-menu-line"></div>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">berberman's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+  <div class="mobile-header-body">
+    <ul class="mobile-header-list">
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-0">
+          <a href="/" >
+            
+              ARTICLE
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-1">
+          <a href="/archives" >
+            
+              ARCHIVES
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-2">
+          <a href="javascript:;" id="mobile-tags">
+            
+              TAGS
+            
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+    <div class="container-inner" style="display:none;">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi fadeInRightShort back-1">
+        <div class="post-time-wrapper">
+          
+          <time>2018-01-31</time>
+          
+        </div>
+      </div>
+      <h2 class="post-title syuanpi fadeInRightShort back-2">
+        
+          Minecraft-Bukkit插件-DSL注册事件监听器
+        
+      </h2>
+    </header>
+    <div class="post-content syuanpi fadeInRightShort back-3">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>上次介绍了如何在 Kotlin 语言中使用 DSL 构造注册命令，这篇来写一下注册事件监听器。</p>
+<p>注册监听器通常情况下都是用 <code>@EventHandler</code> 标注一个方法，写在一个实现空接口 <code>Listener</code> 的类中，像这样：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">object</span> DemoListener : Listener &#123;</span><br><span class="line">	<span class="meta">@EventHandler</span></span><br><span class="line">	<span class="function"><span class="keyword">fun</span> <span class="title">onPlayJoin</span><span class="params">(event: <span class="type">PlayerJoinEvent</span>)</span></span> &#123;</span><br><span class="line">		event.player.sendMessage(ChatColor.AQUA + <span class="string">"Hi!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在插件启动时写上：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pluginManager.registerEvents(DemoListener, plugin)</span><br></pre></td></tr></table></figure>
+
+<p>就可以正常食用了。如果不通过注解反射实现呢？我们需要翻一下源码，看看他的底层是怎么实现的。</p>
+<h2 id="Bukkit-源码部分"><a href="#Bukkit-源码部分" class="headerlink" title="Bukkit 源码部分"></a>Bukkit 源码部分</h2><p>可以在 <a href="https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/browse" target="_blank" rel="noopener">Bukkit</a> 这里找到它的源码。拿到源码后我们从 <code>registerEvents</code> 这里入手，看看它帮我们干了什么不可描述的事情。<code>PluginManager</code> 是个接口，需要到它的实现类 <code>SimplePluginManager</code> 中找。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerEvents</span><span class="params">(Listener listener, Plugin plugin)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//...省略那个插件是否启用的判断</span></span><br><span class="line">       <span class="keyword">for</span> (Map.Entry&lt;Class&lt;? extends Event&gt;, Set&lt;RegisteredListener&gt;&gt; entry :</span><br><span class="line">        plugin.getPluginLoader().createRegisteredListeners(listener, plugin).entrySet()) &#123;</span><br><span class="line">           getEventListeners(getRegistrationClass(entry.getKey()))</span><br><span class="line">           .registerAll(entry.getValue());</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到关键在于掉用了 <code>createRegisteredListeners</code> 这个方法，然后把 <code>RegisteredListeners</code> 和 <code>Event</code> 对应交给 <code>HandlerList</code> 处理。（<code>createRegisteredListeners</code> 是 <code>PluginLoader</code> 接口的方法）同样，我们需要找他的实现类 <code>JavaPluginLoader</code>。这个方法有 87 行，这里简述一下其才做流程：</p>
+<ul>
+<li>拿到 <code>Listener</code> 实例后，用反射找里面的 <code>Method</code>；</li>
+<li>找到 Method 后检验是否符合注册的标准，并且拿到其注解 <code>@EventHandler</code> 中的优先级；</li>
+<li>对于被标注 <code>@Deprecated</code> 并符合要求的方法要在 logger 中打印出来，提醒使用者；</li>
+<li>建立一个 <code>EventExecutor</code> 接口的匿名类实例，将方法 <code>execute</code> 重写，在其中调用反射找来的方法 (<code>method.invoke(listener, event)</code>)；</li>
+<li>根据 <code>useTimings</code> 分别new 出 <code>TimedRegisteredListener</code> 或 <code>RegisteredListener</code>，并把它们加到与 <code>Event</code> 对应的 Map 中。</li>
+</ul>
+<a id="more"></a>
+
+<p>交给 <code>HandlerList</code> 后，其中有一个 <code>EnumMap&lt;EventPriority, ArrayList&lt;RegisteredListener&gt;&gt;</code> 来保存每一个优先级对应的监听器，在 <code>PluginManager</code> 的 <code>fireEvent</code> 方法中调用。看到这我们大概了解了它的注册原理，<code>EventExecutor</code> 这个东西才是最关键的。我们回到 <code>PluginManager</code>，除了有 <code>registerEvents(Listener listener, Plugin plugin)</code> 外，还有两个注册方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerEvent</span><span class="params">(Class&lt;? extends Event&gt; event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin)</span> </span>&#123;</span><br><span class="line">       registerEvent(event, listener, priority, executor, plugin, <span class="keyword">false</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerEvent</span><span class="params">(Class&lt;? extends Event&gt; event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin, <span class="keyword">boolean</span> ignoreCancelled)</span> </span>&#123;</span><br><span class="line">       Validate.notNull(listener, <span class="string">"Listener cannot be null"</span>);</span><br><span class="line">       Validate.notNull(priority, <span class="string">"Priority cannot be null"</span>);</span><br><span class="line">       Validate.notNull(executor, <span class="string">"Executor cannot be null"</span>);</span><br><span class="line">       Validate.notNull(plugin, <span class="string">"Plugin cannot be null"</span>);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (!plugin.isEnabled()) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalPluginAccessException(<span class="string">"Plugin attempted to register "</span> + event + <span class="string">" while not enabled"</span>);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (useTimings) &#123;</span><br><span class="line">           getEventListeners(event).register(<span class="keyword">new</span> TimedRegisteredListener(listener, executor, priority, plugin, ignoreCancelled));</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           getEventListeners(event).register(<span class="keyword">new</span> RegisteredListener(listener, executor, priority, plugin, ignoreCancelled));</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>对比一下刚才的 <code>registerEvents</code> ，我们发现它只是少了用反射找那些 method 的部分，并且让我们传入一个 <code>EventExecutor</code> 实例。这就很简单了，不过我一直没想明白为啥它还要求一个 <code>Listener</code> 实例。。。但是这不重要，传个空的就好，因为在 <code>RegisteredListener</code> 构造时也没有对 <code>Listener</code> 做出什么不可描述的事情。试着用一下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pluginManager.registerEvent(PlayerJoinEvent::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>, <span class="type">object : Listener &#123;&#125;</span>,<span class="type"></span></span></span><br><span class="line">				EventPriority.NORMAL,</span><br><span class="line">				&#123; _: Listener, e: Event -&gt; (e <span class="keyword">as</span> PlayerJoinEvent).player sendMessage <span class="string">"你好！"</span> &#125;,</span><br><span class="line">				plugin</span><br><span class="line">		)</span><br></pre></td></tr></table></figure>
+
+<p>这里第三个参数应该是 <code>EventExecutor</code>，但此接口符合函数式接口的标准，Kotlin 帮我们 SAM 转换成 <code>(Listener,Event) -&gt; Unit</code>。写好后放到服务器里运行，发现插件可以正常工作，下面就可以开始写 DSL 语言结构了。</p>
+<h2 id="DSL-构造事件监听器"><a href="#DSL-构造事件监听器" class="headerlink" title="DSL 构造事件监听器"></a>DSL 构造事件监听器</h2><p>与上篇说的命令相似，我们同样需要把监听器封装一下，让他持有注册时所需要的参数：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">data</span> <span class="class"><span class="keyword">class</span> <span class="title">PackingEvent</span>&lt;<span class="type">in T : Event</span>&gt;</span>(<span class="keyword">private</span> <span class="keyword">val</span> type: Class&lt;<span class="keyword">out</span> Event&gt;,</span><br><span class="line">                                      <span class="keyword">private</span> <span class="keyword">val</span> eventPriority: EventPriority,</span><br><span class="line">                                      <span class="keyword">private</span> <span class="keyword">val</span> block: (T) -&gt; <span class="built_in">Unit</span>) &#123;</span><br><span class="line">	<span class="meta">@Suppress(<span class="meta-string">"UNCHECKED_CAST"</span>)</span></span><br><span class="line">	<span class="function"><span class="keyword">fun</span> <span class="title">register</span><span class="params">()</span></span> &#123;</span><br><span class="line">		pluginManager.registerEvent(type, emptyListener, eventPriority,</span><br><span class="line">				&#123; _: Listener, event -&gt;</span><br><span class="line">					block(event <span class="keyword">as</span> T)</span><br><span class="line">				&#125;, plugin)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 Kotlin 中可以用数据类进行封装，不过没获得什么好处。因为我们传进去的是空 <code>Listener</code>，所以没必要再把一个空的拿回来。将 <code>event</code> cast 成 <code>T</code>，这里不用担心 cast 出错，因为注册的是什么事件，传进来的一定是想要的，类型不会错。有了 <code>PackingEvent</code>，就可以创造 Builder 了。但我们发现，与命令不同，注册事件没有那些可有可无的东西，并且只需要优先级和一个 <code>(T) -&gt; Unit</code>。这样就没有必要再写 Builder 了，直接写个 Scope：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EventScope</span> </span>&#123;</span><br><span class="line">	<span class="keyword">inline</span> <span class="function"><span class="keyword">fun</span> <span class="type">&lt;<span class="keyword">reified</span> T : Event&gt;</span> <span class="title">event</span><span class="params">(eventPriority: <span class="type">EventPriority</span> = EventPriority.NORMAL, <span class="keyword">noinline</span> block: <span class="type">T</span>.() -&gt; <span class="type">Unit</span>)</span></span> &#123;</span><br><span class="line">		PackingEvent(T::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>, <span class="type">eventPriority</span>, <span class="type">block).let</span></span>(EventHolder::add)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只有一个函数，为了获取泛型的类实例，要写成 <code>inline</code> + <code>reified</code>。但 <code>block : (T) -&gt; Unit</code> 会被存到 <code>PackingEvent</code> 中，并非原地调用，不能被编译器内联优化，所以 <code>block</code> 要加上关键字 <code>noinline</code>。</p>
+<p>再把 Scope 开放出来：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">buildEvents</span><span class="params">(block: <span class="type">EventScope</span>.() -&gt; <span class="type">Unit</span>)</span></span> =</span><br><span class="line">	EventScope().block()</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以愉快的食用了，在插件启动时写上：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">buildEvents &#123;</span><br><span class="line">	event&lt;PlayerJoinEvent&gt;(EventPriority.HIGH) &#123;</span><br><span class="line">		player.sendMessage(ChatColor.GREEN+<span class="string">"欢迎加入!~"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	event&lt;PlayerBedLeaveEvent&gt; &#123;</span><br><span class="line">		<span class="comment">//...</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>event</code> 函数中直接写成了 <code>T.() -&gt; Unit</code> 并且 <code>apply(block)</code> 这个大括号的里面就相当于对应事件的类中，可以直接访问里面的公共成员。优先级上面定义了如果不声明默认是 <code>NORMAL</code>。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>还是说几个问题：</p>
+<ul>
+<li>无法动态注册、取消注册</li>
+<li>封装性欠缺</li>
+</ul>
+<p>同命令部分，大家可以自行摸索或参考一下 <a href="https://github.com/berberman/emerald" target="_blank" rel="noopener">emerald</a> 中的 <a href="https://github.com/berberman/emerald/tree/master/common/src/cn/berberman/emerald/event" target="_blank" rel="noopener">部分</a>。</p>
+
+      
+    
+    </div>
+    
+      <div class="post-tags syuanpi fadeInRightShort back-3">
+      
+        <a href="/tags/Minecraft/">Minecraft</a>
+      
+      </div>
+    
+    
+      
+
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>作者 :</span>
+      <span>berberman</span>
+    </div>
+    <div class="copy-url">
+      <span>地址 :</span>
+      <a href="https://berberman.cn/2018/01/31/minecraft-dsl-event/">https://berberman.cn/2018/01/31/minecraft-dsl-event/</a>
+    </div>
+    <div class="copy-origin">
+      <span>来源 :</span>
+      <a href="https://berberman.cn">https://berberman.cn</a>
+    </div>
+    <div class="copy-license">
+      
+      WTFPL
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+      <a href="/2018/05/08/minecraft-plugin-classloader/" id="art-left" class="art-left">
+        <span class="next-title">
+          <i class="iconfont icon-left"></i>Minecraft-Bukkit插件-插件类加载器
+        </span>
+      </a>
+    
+    
+      <a href="/2018/01/30/minecraft-dsl-command/" id="art-right" class="art-right">
+        <span class="prev-title">
+          Minecraft-Bukkit插件-DSL注册命令<i class="iconfont icon-right"></i>
+        </span>
+      </a>
+    
+  </nav>
+
+
+    
+  <i id="com-switch" class="iconfont icon-down jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+
+    
+    
+
+    
+
+  </div>
+
+
+
+  
+  
+    
+  
+  <aside class="post-toc">
+    <div class="title"><span>文章导航</span></div>
+    <div class="toc-inner">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bukkit-源码部分"><span class="toc-text">Bukkit 源码部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DSL-构造事件监听器"><span class="toc-text">DSL 构造事件监听器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+  </aside>
+
+
+
+  
+
+
+        </div>
+      </main>
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+  
+  
+</div>
+
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2020</span>
+        <span>❤</span>
+        <span>berberman</span>
+    </div>
+    <div class="theme">
+        <span>
+            动力来源于
+            <a href="http://hexo.io/" target="_blank" rel="noopener">Hexo </a>
+        </span>
+        <span>
+            主题
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi" target="_blank" rel="noopener"> Nlvi </a>
+        </span>
+    </div>
+    
+</div>
+
+    </div>
+  </div>
+</footer>
+    </div>
+    <div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-taglist">
+  
+    <div class="tagcloud-tag">
+      <button>Minecraft</button>
+    </div>
+  
+  </div>
+  
+    <div class="tagcloud-postlist active">
+      <h2>Minecraft</h2>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/30/minecraft-dsl-command/">
+            <time class="tagcloud-posttime">2018 / 01 / 30</time>
+            <span>Minecraft-Bukkit插件-DSL注册命令</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/31/minecraft-dsl-event/">
+            <time class="tagcloud-posttime">2018 / 01 / 31</time>
+            <span>Minecraft-Bukkit插件-DSL注册事件监听器</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/05/08/minecraft-plugin-classloader/">
+            <time class="tagcloud-posttime">2018 / 05 / 08</time>
+            <span>Minecraft-Bukkit插件-插件类加载器</span>
+          </a>
+        </div>
+      
+    </div>
+  
+</div>
+
+  </div>
+  <div class="backtop syuanpi melt toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+  <div class="search" id="search">
+    <div class="input">
+      <input type="text" id="search-input" placeholder="搜索一下？" autofocus>
+    </div>
+    <div id="search-result"></div>
+  </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.7/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+
+
+
+
+  
+<script src="/script/lib/pjax/pjax.js"></script>
+
+
+
+
+  
+<script src="/script/scheme/banderole.js"></script>
+
+
+
+
+<script src="/script/bootstarp.js"></script>
+
+
+
+<script>
+if (nlviconfig.theme.toc) {
+  setTimeout(function() {
+    if (nlviconfig.theme.scheme === 'balance') {
+      $("#header").addClass("show_toc");
+    } else if (nlviconfig.theme.scheme === 'banderole') {
+      $(".container-inner").addClass("has_toc");
+      $(".post-toc .title").addClass("show");
+      $(".toc-inner").addClass("show");
+    }
+  }, 1000);
+}
+</script>
+
+
+
+</body>
+</html>

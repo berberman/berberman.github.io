@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="berberman's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+
+  <link rel="apple-touch-icon"  sizes="72x72"  href="assets/favicon.ico">
+  <link rel="apple-touch-icon-precomposed"  sizes="72x72"  href="assets/favicon.ico">
+
+
+
+
+  <meta name="keywords" content="berberman" />
+
+
+  <meta name="keywords" content="Minecraft, nlvi" />
+
+
+<link rel="apple-touch-startup-image" media="(device-width: 375px)" href="assets/apple-launch-1125x2436.png">
+<link rel="apple-touch-startup-image" media="(orientation: landscape)" href="assets/apple-touch-startup-image-2048x1496.png">
+
+<link rel="stylesheet" href="/style/style.css">
+
+<script>
+  var nlviconfig = {
+    title: "berberman's Blog",
+    author: "berberman",
+    baseUrl: "/",
+    theme: {
+      scheme: "banderole",
+      lightbox: false,
+      animate: false,
+      search: true,
+      friends: false,
+      reward: false,
+      pjax: true,
+      lazy: false,
+      toc: true
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+    <link rel="icon" href="assets/favicon.ico">
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+@font-face {
+  font-family: "Allura";
+  src: url('/font/allura/allura.ttf');
+}
+</style>
+
+  <title> Minecraft-Bukkit插件-插件类加载器 · berberman's Blog </title>
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+  <div class="container">
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn" style="display:none;">
+    <h1><a href="/">berberman's Blog</a></h1>
+    
+  </div>
+</div>
+
+    <nav class="main-nav">
+  
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search-btn" aria-label="Search">
+        <i class="iconfont icon-search"></i>
+      </a>
+    </li>
+  
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">
+          
+            ARTICLE
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">
+          
+            ARCHIVES
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">
+          
+            TAGS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+  </ul>
+  
+</nav>
+
+  </div>
+</header>
+<div class="mobile-header" id="mobile-header">
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <div class="header-menu-line"></div>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">berberman's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+  <div class="mobile-header-body">
+    <ul class="mobile-header-list">
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-0">
+          <a href="/" >
+            
+              ARTICLE
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-1">
+          <a href="/archives" >
+            
+              ARCHIVES
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-2">
+          <a href="javascript:;" id="mobile-tags">
+            
+              TAGS
+            
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+    <div class="container-inner" style="display:none;">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi fadeInRightShort back-1">
+        <div class="post-time-wrapper">
+          
+          <time>2018-05-08</time>
+          
+        </div>
+      </div>
+      <h2 class="post-title syuanpi fadeInRightShort back-2">
+        
+          Minecraft-Bukkit插件-插件类加载器
+        
+      </h2>
+    </header>
+    <div class="post-content syuanpi fadeInRightShort back-3">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在开发 Bukkit 插件库的过程中，有时会需要用到插件主类实例的情况。举一个栗子：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">registerEventListeners(<span class="keyword">this</span>) &#123;</span><br><span class="line">	event&lt;PlayerJoinEvent&gt; &#123;</span><br><span class="line">		player.sendMessage(<span class="string">"Hello!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为事件监听器的注册需要绑定在插件上，对于库/前置插件开发者来说，需要每次用到插件实例时让调用者提供。看起来没什么不对的，但这里有一个更好的方法。我们先来分析下插件是如何加载的。</p>
+<h2 id="插件注册分析"><a href="#插件注册分析" class="headerlink" title="插件注册分析"></a>插件注册分析</h2><p>服务器插件的加载是由 <code>CraftServer</code> 的 <code>loadPlugins</code> 开始的。</p>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">CraftServer</span> <span class="keyword">implements</span> <span class="title">Server</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loadPlugins</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.pluginManager.registerInterface(JavaPluginLoader<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        File pluginFolder = (File)<span class="keyword">this</span>.console.options.valueOf(<span class="string">"plugins"</span>);</span><br><span class="line">        <span class="keyword">if</span> (pluginFolder.exists()) &#123;</span><br><span class="line">            Plugin[] plugins = <span class="keyword">this</span>.pluginManager.loadPlugins(pluginFolder);</span><br><span class="line">            Plugin[] var6 = plugins;</span><br><span class="line">            <span class="keyword">int</span> var5 = plugins.length;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> var4 = <span class="number">0</span>; var4 &lt; var5; ++var4) &#123;</span><br><span class="line">                Plugin plugin = var6[var4];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    String message = String.format(<span class="string">"Loading %s"</span>, plugin.getDescription().getFullName());</span><br><span class="line">                    plugin.getLogger().info(message);</span><br><span class="line">                    plugin.onLoad();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Throwable var8) &#123;</span><br><span class="line">                    Logger.getLogger(CraftServer.class.getName()).log(Level.SEVERE, var8.getMessage() + " initializing " + plugin.getDescription().getFullName() + " (Is it up to date?)", var8);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            pluginFolder.mkdir();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先，<code>CraftServer</code> 调用了其内部持有的 <code>SimplePluginManager</code> 的 <code>registerInterface(JavaPluginLoader.class)</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SimplePluginManager</span> <span class="keyword">implements</span> <span class="title">PluginManager</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerInterface</span><span class="params">(Class&lt;? extends PluginLoader&gt; loader)</span> <span class="keyword">throws</span> IllegalArgumentException </span>&#123;</span><br><span class="line">        PluginLoader instance;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (PluginLoader<span class="class">.<span class="keyword">class</span>.<span class="title">isAssignableFrom</span>(<span class="title">loader</span>)) </span>&#123;</span><br><span class="line">            Constructor&lt;? extends PluginLoader&gt; constructor;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                constructor = loader.getConstructor(Server<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">                instance = constructor.newInstance(server);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NoSuchMethodException ex) &#123;</span><br><span class="line">                String className = loader.getName();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(String.format(<span class="string">"Class %s does not have a public %s(Server) constructor"</span>, className, className), ex);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(String.format(<span class="string">"Unexpected exception %s while attempting to construct a new instance of %s"</span>, ex.getClass().getName(), loader.getName()), ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(String.format(<span class="string">"Class %s does not implement interface PluginLoader"</span>, loader.getName()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Pattern[] patterns = instance.getPluginFileFilters();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (Pattern pattern : patterns) &#123;</span><br><span class="line">                fileAssociations.put(pattern, instance);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这一步<code>SimplePluginManager</code> 负责 new 出 <code>JavaPluginLoader</code> 的实例，并且将插件名字过滤正则与 <code>JavaPluginLoader</code> 实例对应。（默认情况下 <code>PluginLoader</code> 接口仅有一个实现类 <code>JavaPluginLoader</code>）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaPluginLoader</span> <span class="keyword">implements</span> <span class="title">PluginLoader</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Pattern[] fileFilters = [Pattern.compile(<span class="string">"\\.jar$"</span>)];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> <code>JavaPluginLoader</code> 只含有一个正则表达式，用于过滤插件文件夹中的文件。<br>接着，<code>CraftServer</code> 会调用 <code>SimplePluginManager</code> 的 <code>loadPlugins(File)</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Plugin[] loadPlugins(File directory) &#123;</span><br><span class="line">    Validate.notNull(directory, <span class="string">"Directory cannot be null"</span>);</span><br><span class="line">    Validate.isTrue(directory.isDirectory(), <span class="string">"Directory must be a directory"</span>);</span><br><span class="line"></span><br><span class="line">    List&lt;Plugin&gt; result = <span class="keyword">new</span> ArrayList&lt;Plugin&gt;();</span><br><span class="line">    Set&lt;Pattern&gt; filters = fileAssociations.keySet();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!(server.getUpdateFolder().equals(<span class="string">""</span>))) &#123;</span><br><span class="line">        updateDirectory = <span class="keyword">new</span> File(directory, server.getUpdateFolder());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Map&lt;String, File&gt; plugins = <span class="keyword">new</span> HashMap&lt;String, File&gt;();</span><br><span class="line">    Set&lt;String&gt; loadedPlugins = <span class="keyword">new</span> HashSet&lt;String&gt;();</span><br><span class="line">    Map&lt;String, Collection&lt;String&gt;&gt; dependencies = <span class="keyword">new</span> HashMap&lt;String, Collection&lt;String&gt;&gt;();</span><br><span class="line">    Map&lt;String, Collection&lt;String&gt;&gt; softDependencies = <span class="keyword">new</span> HashMap&lt;String, Collection&lt;String&gt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This is where it figures out all possible plugins</span></span><br><span class="line">    <span class="keyword">for</span> (File file : directory.listFiles()) &#123;</span><br><span class="line">        PluginLoader loader = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">for</span> (Pattern filter : filters) &#123;</span><br><span class="line">            Matcher match = filter.matcher(file.getName());</span><br><span class="line">            <span class="keyword">if</span> (match.find()) &#123;</span><br><span class="line">                loader = fileAssociations.get(filter);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (loader == <span class="keyword">null</span>) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        PluginDescriptionFile description = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            description = loader.getPluginDescription(file);</span><br><span class="line">            String name = description.getName();</span><br><span class="line">            <span class="keyword">if</span> (name.equalsIgnoreCase(<span class="string">"bukkit"</span>) || name.equalsIgnoreCase(<span class="string">"minecraft"</span>) || name.equalsIgnoreCase(<span class="string">"mojang"</span>)) &#123;</span><br><span class="line">                server.getLogger().log(Level.SEVERE, <span class="string">"Could not load '"</span> + file.getPath() + <span class="string">"' in folder '"</span> + directory.getPath() + <span class="string">"': Restricted Name"</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (description.rawName.indexOf(<span class="string">' '</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">                server.getLogger().log(Level.SEVERE, <span class="string">"Could not load '"</span> + file.getPath() + <span class="string">"' in folder '"</span> + directory.getPath() + <span class="string">"': uses the space-character (0x20) in its name"</span>);</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvalidDescriptionException ex) &#123;</span><br><span class="line">            server.getLogger().log(Level.SEVERE, <span class="string">"Could not load '"</span> + file.getPath() + <span class="string">"' in folder '"</span> + directory.getPath() + <span class="string">"'"</span>, ex);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        File replacedFile = plugins.put(description.getName(), file);</span><br><span class="line">        <span class="keyword">if</span> (replacedFile != <span class="keyword">null</span>) &#123;</span><br><span class="line">            server.getLogger().severe(String.format(</span><br><span class="line">                <span class="string">"Ambiguous plugin name `%s' for files `%s' and `%s' in `%s'"</span>,</span><br><span class="line">                description.getName(),</span><br><span class="line">                file.getPath(),</span><br><span class="line">                replacedFile.getPath(),</span><br><span class="line">                directory.getPath()</span><br><span class="line">            ));</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="comment">//省去通过依赖分析来决定加载顺序。</span></span><br><span class="line">    <span class="keyword">return</span> result.toArray(<span class="keyword">new</span> Plugin[result.size()]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该方法会找到目录下所有 jar 文件，并调用 <code>JavaPluginLoader</code> 的 <code>getPluginDescription(File)</code> 方法，找到目录下所有插件的描述文件。下一步会根据 <code>softDependency</code> 和 <code>dependency</code> 处理各个插件的加载顺序，并进行一系列的合法性校验，并对每个合法文件调用 <code>loadPlugin(File)</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">SimplePluginManager</span> <span class="keyword">implements</span> <span class="title">PluginManager</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Plugin <span class="title">loadPlugin</span><span class="params">(File file)</span> <span class="keyword">throws</span> InvalidPluginException, UnknownDependencyException </span>&#123;</span><br><span class="line">        Validate.notNull(file, <span class="string">"File cannot be null"</span>);</span><br><span class="line"></span><br><span class="line">        checkUpdate(file);</span><br><span class="line"></span><br><span class="line">        Set&lt;Pattern&gt; filters = fileAssociations.keySet();</span><br><span class="line">        Plugin result = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Pattern filter : filters) &#123;</span><br><span class="line">        String name = file.getName();</span><br><span class="line">        Matcher match = filter.matcher(name);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (match.find()) &#123;</span><br><span class="line">            PluginLoader loader = fileAssociations.get(filter);</span><br><span class="line"></span><br><span class="line">            result = loader.loadPlugin(file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">        plugins.add(result);</span><br><span class="line">        lookupNames.put(result.getDescription().getName(), result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当正则匹配时，方法调用了 <code>fileAssociations</code> 中存的 loader，也就是 <code>JavaPluginLoader</code> 的 <code>loadPlugin(File)</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaPluginLoader</span> <span class="keyword">implements</span> <span class="title">PluginLoader</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Plugin <span class="title">loadPlugin</span><span class="params">(<span class="keyword">final</span> File file)</span> <span class="keyword">throws</span> InvalidPluginException </span>&#123;</span><br><span class="line">        Validate.notNull(file, <span class="string">"File cannot be null"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!file.exists()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(<span class="keyword">new</span> FileNotFoundException(file.getPath() + <span class="string">" does not exist"</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> PluginDescriptionFile description;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            description = getPluginDescription(file);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvalidDescriptionException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> File parentFile = file.getParentFile();</span><br><span class="line">        <span class="keyword">final</span> File dataFolder = <span class="keyword">new</span> File(parentFile, description.getName());</span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(<span class="string">"deprecation"</span>)</span><br><span class="line">        <span class="keyword">final</span> File oldDataFolder = <span class="keyword">new</span> File(parentFile, description.getRawName());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Found old data folder</span></span><br><span class="line">        <span class="keyword">if</span> (dataFolder.equals(oldDataFolder)) &#123;</span><br><span class="line">            <span class="comment">// They are equal -- nothing needs to be done!</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (dataFolder.isDirectory() &amp;&amp; oldDataFolder.isDirectory()) &#123;</span><br><span class="line">            server.getLogger().warning(String.format(</span><br><span class="line">                <span class="string">"While loading %s (%s) found old-data folder: `%s' next to the new one `%s'"</span>,</span><br><span class="line">                description.getFullName(),</span><br><span class="line">                file,</span><br><span class="line">                oldDataFolder,</span><br><span class="line">                dataFolder</span><br><span class="line">            ));</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (oldDataFolder.isDirectory() &amp;&amp; !dataFolder.exists()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!oldDataFolder.renameTo(dataFolder)) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(<span class="string">"Unable to rename old data folder: `"</span> + oldDataFolder + <span class="string">"' to: `"</span> + dataFolder + <span class="string">"'"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            server.getLogger().log(Level.INFO, String.format(</span><br><span class="line">                <span class="string">"While loading %s (%s) renamed data folder: `%s' to `%s'"</span>,</span><br><span class="line">                description.getFullName(),</span><br><span class="line">                file,</span><br><span class="line">                oldDataFolder,</span><br><span class="line">                dataFolder</span><br><span class="line">            ));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (dataFolder.exists() &amp;&amp; !dataFolder.isDirectory()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(String.format(</span><br><span class="line">                <span class="string">"Projected datafolder: `%s' for %s (%s) exists and is not a directory"</span>,</span><br><span class="line">                dataFolder,</span><br><span class="line">                description.getFullName(),</span><br><span class="line">                file</span><br><span class="line">            ));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">final</span> String pluginName : description.getDepend()) &#123;</span><br><span class="line">            Plugin current = server.getPluginManager().getPlugin(pluginName);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (current == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> UnknownDependencyException(pluginName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> PluginClassLoader loader;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            loader = <span class="keyword">new</span> PluginClassLoader(<span class="keyword">this</span>, getClass().getClassLoader(), description, dataFolder, file);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InvalidPluginException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> ex;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        loaders.add(loader);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> loader.plugin;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里对插件数据文件夹进行诸如创建之类的操作，并且检测当前插件的依赖是否全部已经被加载。接下来最重要的一步为 new 出 <code>PluginClassLoader</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">PluginClassLoader</span> <span class="keyword">extends</span> <span class="title">URLClassLoader</span> </span>&#123;</span><br><span class="line">    PluginClassLoader(<span class="keyword">final</span> JavaPluginLoader loader, <span class="keyword">final</span> ClassLoader parent, <span class="keyword">final</span> PluginDescriptionFile description, <span class="keyword">final</span> File dataFolder, <span class="keyword">final</span> File file) <span class="keyword">throws</span> IOException, InvalidPluginException, MalformedURLException &#123;</span><br><span class="line">        <span class="keyword">super</span>(<span class="keyword">new</span> URL[] &#123;file.toURI().toURL()&#125;, parent);</span><br><span class="line">        Validate.notNull(loader, <span class="string">"Loader cannot be null"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.loader = loader;</span><br><span class="line">        <span class="keyword">this</span>.description = description;</span><br><span class="line">        <span class="keyword">this</span>.dataFolder = dataFolder;</span><br><span class="line">        <span class="keyword">this</span>.file = file;</span><br><span class="line">        <span class="keyword">this</span>.jar = <span class="keyword">new</span> JarFile(file);</span><br><span class="line">        <span class="keyword">this</span>.manifest = jar.getManifest();</span><br><span class="line">        <span class="keyword">this</span>.url = file.toURI().toURL();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class&lt;?&gt; jarClass;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                jarClass = Class.forName(description.getMain(), <span class="keyword">true</span>, <span class="keyword">this</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ClassNotFoundException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(<span class="string">"Cannot find main class `"</span> + description.getMain() + <span class="string">"'"</span>, ex);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Class&lt;? extends JavaPlugin&gt; pluginClass;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                pluginClass = jarClass.asSubclass(JavaPlugin<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ClassCastException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(<span class="string">"main class `"</span> + description.getMain() + <span class="string">"' does not extend JavaPlugin"</span>, ex);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            plugin = pluginClass.newInstance();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(<span class="string">"No public constructor"</span>, ex);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InstantiationException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidPluginException(<span class="string">"Abnormal plugin type"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>PluginClassLoader</code> 构造器中校验插件主类，并使用反射在本类加载器下创建实例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaPlugin</span> <span class="keyword">extends</span> <span class="title">PluginBase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JavaPlugin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ClassLoader classLoader = <span class="keyword">this</span>.getClass().getClassLoader();</span><br><span class="line">    <span class="keyword">if</span> (!(classLoader <span class="keyword">instanceof</span> PluginClassLoader)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"JavaPlugin requires "</span> + PluginClassLoader<span class="class">.<span class="keyword">class</span>.<span class="title">getName</span>())</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ((PluginClassLoader) classLoader).initialize(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>JavaPlugin</code> 的构造器中，其调用了 <code>PluginClassLoader</code> 的 <code>initialize(JavaPlugin)</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">PluginClassLoader</span> <span class="keyword">extends</span> <span class="title">URLClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">(JavaPlugin javaPlugin)</span> </span>&#123;</span><br><span class="line">        Validate.notNull(javaPlugin, <span class="string">"Initializing plugin cannot be null"</span>);</span><br><span class="line">        Validate.isTrue(javaPlugin.getClass().getClassLoader() == <span class="keyword">this</span>, <span class="string">"Cannot initialize plugin outside of this class loader"</span>);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.plugin != <span class="keyword">null</span> || <span class="keyword">this</span>.pluginInit != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Plugin already initialized!"</span>, pluginState);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        pluginState = <span class="keyword">new</span> IllegalStateException(<span class="string">"Initial initialization"</span>);</span><br><span class="line">        <span class="keyword">this</span>.pluginInit = javaPlugin;</span><br><span class="line"></span><br><span class="line">        javaPlugin.init(loader, loader.server, description, dataFolder, file, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><del><code>pluginState</code> 居然是 <code>IllegalArgumentException</code>，我觉得布星。</del><br>这里 <code>initialize(JavaPlugin)</code> 又调用了 <code>JavaPlugin</code> 的<code>init(PluginLoader, Server, PluginDescriptionFile, File, File, ClassLoader)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaPlugin</span> <span class="keyword">extends</span> <span class="title">PluginBase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file, ClassLoader classLoader)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.loader = loader;</span><br><span class="line">        <span class="keyword">this</span>.server = server;</span><br><span class="line">        <span class="keyword">this</span>.file = file;</span><br><span class="line">        <span class="keyword">this</span>.description = description;</span><br><span class="line">        <span class="keyword">this</span>.dataFolder = dataFolder;</span><br><span class="line">        <span class="keyword">this</span>.classLoader = classLoader;</span><br><span class="line">        <span class="keyword">this</span>.configFile = <span class="keyword">new</span> File(dataFolder, <span class="string">"config.yml"</span>);</span><br><span class="line">        <span class="keyword">this</span>.logger = <span class="keyword">new</span> PluginLogger(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该方法传入了一些参数，供插件编写者使用。至此，一个插件就加载好了。</p>
+<h2 id="大雾"><a href="#大雾" class="headerlink" title="大雾"></a>大雾</h2><p>了解一个插件是如何被加载后，我们可以从属于该插件代码内的任何一个实例获取插件主类的实例。直接上代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Jaba</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JavaPlugin <span class="title">jaba</span><span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">		ClassLoader classLoader = object.getClass().getClassLoader();</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Class&lt;?&gt; loaderClass = Class.forName(<span class="string">"org.bukkit.plugin.java.PluginClassLoader"</span>);</span><br><span class="line">			<span class="keyword">if</span>(!loaderClass.isInstance(classLoader))</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> IllegalPluginAccessException();</span><br><span class="line">			Field pluginField = loaderClass.getField(<span class="string">"plugin"</span>);</span><br><span class="line">			pluginField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">			<span class="keyword">return</span> (JavaPlugin) pluginField.get(classLoader);</span><br><span class="line">		&#125; <span class="keyword">catch</span>(ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> IllegalPluginAccessException(e.getMessage());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>万恶的 <code>PluginClassLoader</code> 是 package-private 的，所以需要通过反射访问。只是这段代码是 100% 不可能用到的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>无。</p>
+
+      
+    
+    </div>
+    
+      <div class="post-tags syuanpi fadeInRightShort back-3">
+      
+        <a href="/tags/Minecraft/">Minecraft</a>
+      
+      </div>
+    
+    
+      
+
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>作者 :</span>
+      <span>berberman</span>
+    </div>
+    <div class="copy-url">
+      <span>地址 :</span>
+      <a href="https://berberman.cn/2018/05/08/minecraft-plugin-classloader/">https://berberman.cn/2018/05/08/minecraft-plugin-classloader/</a>
+    </div>
+    <div class="copy-origin">
+      <span>来源 :</span>
+      <a href="https://berberman.cn">https://berberman.cn</a>
+    </div>
+    <div class="copy-license">
+      
+      WTFPL
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+    
+      <a href="/2018/01/31/minecraft-dsl-event/" id="art-right" class="art-right">
+        <span class="prev-title">
+          Minecraft-Bukkit插件-DSL注册事件监听器<i class="iconfont icon-right"></i>
+        </span>
+      </a>
+    
+  </nav>
+
+
+    
+  <i id="com-switch" class="iconfont icon-down jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+
+    
+    
+
+    
+
+  </div>
+
+
+
+  
+  
+    
+  
+  <aside class="post-toc">
+    <div class="title"><span>文章导航</span></div>
+    <div class="toc-inner">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#插件注册分析"><span class="toc-text">插件注册分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大雾"><span class="toc-text">大雾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+  </aside>
+
+
+
+  
+
+
+        </div>
+      </main>
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+  
+  
+</div>
+
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2020</span>
+        <span>❤</span>
+        <span>berberman</span>
+    </div>
+    <div class="theme">
+        <span>
+            动力来源于
+            <a href="http://hexo.io/" target="_blank" rel="noopener">Hexo </a>
+        </span>
+        <span>
+            主题
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi" target="_blank" rel="noopener"> Nlvi </a>
+        </span>
+    </div>
+    
+</div>
+
+    </div>
+  </div>
+</footer>
+    </div>
+    <div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-taglist">
+  
+    <div class="tagcloud-tag">
+      <button>Minecraft</button>
+    </div>
+  
+  </div>
+  
+    <div class="tagcloud-postlist active">
+      <h2>Minecraft</h2>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/30/minecraft-dsl-command/">
+            <time class="tagcloud-posttime">2018 / 01 / 30</time>
+            <span>Minecraft-Bukkit插件-DSL注册命令</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/31/minecraft-dsl-event/">
+            <time class="tagcloud-posttime">2018 / 01 / 31</time>
+            <span>Minecraft-Bukkit插件-DSL注册事件监听器</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/05/08/minecraft-plugin-classloader/">
+            <time class="tagcloud-posttime">2018 / 05 / 08</time>
+            <span>Minecraft-Bukkit插件-插件类加载器</span>
+          </a>
+        </div>
+      
+    </div>
+  
+</div>
+
+  </div>
+  <div class="backtop syuanpi melt toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+  <div class="search" id="search">
+    <div class="input">
+      <input type="text" id="search-input" placeholder="搜索一下？" autofocus>
+    </div>
+    <div id="search-result"></div>
+  </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.7/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+
+
+
+
+  
+<script src="/script/lib/pjax/pjax.js"></script>
+
+
+
+
+  
+<script src="/script/scheme/banderole.js"></script>
+
+
+
+
+<script src="/script/bootstarp.js"></script>
+
+
+
+<script>
+if (nlviconfig.theme.toc) {
+  setTimeout(function() {
+    if (nlviconfig.theme.scheme === 'balance') {
+      $("#header").addClass("show_toc");
+    } else if (nlviconfig.theme.scheme === 'banderole') {
+      $(".container-inner").addClass("has_toc");
+      $(".post-toc .title").addClass("show");
+      $(".toc-inner").addClass("show");
+    }
+  }, 1000);
+}
+</script>
+
+
+
+</body>
+</html>
