@@ -1,3 +1,3 @@
-# berberman.github.io-sources
-奥利给！
+# berberman.github.io
+奥利给博客
 
