@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="berberman's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+
+  <link rel="apple-touch-icon"  sizes="72x72"  href="https://www.berberman.cn/favicon.ico">
+  <link rel="apple-touch-icon-precomposed"  sizes="72x72"  href="https://www.berberman.cn/favicon.ico">
+
+
+
+
+  <meta name="keywords" content="berberman" />
+
+
+  <meta name="keywords" content="Haskell, nlvi" />
+
+
+<link rel="apple-touch-startup-image" media="(device-width: 375px)" href="assets/apple-launch-1125x2436.png">
+<link rel="apple-touch-startup-image" media="(orientation: landscape)" href="assets/apple-touch-startup-image-2048x1496.png">
+
+<link rel="stylesheet" href="/style/style.css">
+
+<script>
+  var nlviconfig = {
+    title: "berberman's Blog",
+    author: "berberman",
+    baseUrl: "/",
+    theme: {
+      scheme: "banderole",
+      lightbox: false,
+      animate: false,
+      search: true,
+      friends: false,
+      reward: false,
+      pjax: true,
+      lazy: false,
+      toc: true
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+    <link rel="icon" href="https://www.berberman.cn/favicon.ico">
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+@font-face {
+  font-family: "Allura";
+  src: url('/font/allura/allura.ttf');
+}
+</style>
+
+  <title> 续体单子 · berberman's Blog </title>
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+  <div class="container">
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn" style="display:none;">
+    <h1><a href="/">berberman's Blog</a></h1>
+    
+  </div>
+</div>
+
+    <nav class="main-nav">
+  
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search-btn" aria-label="Search">
+        <i class="iconfont icon-search"></i>
+      </a>
+    </li>
+  
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">
+          
+            ARTICLE
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">
+          
+            ARCHIVES
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">
+          
+            TAGS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+  </ul>
+  
+</nav>
+
+  </div>
+</header>
+<div class="mobile-header" id="mobile-header">
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <div class="header-menu-line"></div>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">berberman's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+  <div class="mobile-header-body">
+    <ul class="mobile-header-list">
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-0">
+          <a href="/" >
+            
+              ARTICLE
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-1">
+          <a href="/archives" >
+            
+              ARCHIVES
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-2">
+          <a href="javascript:;" id="mobile-tags">
+            
+              TAGS
+            
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+    <div class="container-inner" style="display:none;">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi fadeInRightShort back-1">
+        <div class="post-time-wrapper">
+          
+          <time>2020-05-15</time>
+          
+        </div>
+      </div>
+      <h2 class="post-title syuanpi fadeInRightShort back-2">
+        
+          续体单子
+        
+      </h2>
+    </header>
+    <div class="post-content syuanpi fadeInRightShort back-3">
+      
+        <p>原文：<br><a href="http://www.haskellforall.com/2012/12/the-continuation-monad.html" target="_blank" rel="noopener">Gabriel Gonzalez, Sunday, December 30, 2012, Haskell for all</a></p>
+<p><del>其质量一言难尽啊</del><br><del>居然没有 <code>callCC</code></del></p>
+<p>续体单子是最不受欢迎的单子之一，在这篇文章中我希望能够鼓励大家去使用它。文章会从续体的整体概念和作为单子具有的特性来展开。</p>
+<a id="more"></a>
+
+<h2 id="续体"><a href="#续体" class="headerlink" title="续体"></a>续体</h2><p>Haskell 续体具有以下类型：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">Cont</span> r a = <span class="type">Cont</span> &#123; <span class="title">runCont</span> :: ( <span class="title">a</span> -&gt; <span class="title">r</span> ) -&gt; <span class="title">r</span> &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>一个续体会接收一个 <code>(a -&gt; r)</code> 的函数，并生成 <code>r</code>（可能是固定的值，像 <code>Int</code> 或 <code>IO ()</code>）。</p>
+<p>举个例子，我可能会编写一个长时间运行的程序，每当用户输入一行输入时就会产生一个动作：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">onInput</span> :: (<span class="type">String</span> -&gt; <span class="type">IO</span> ()) -&gt; <span class="type">IO</span> ()</span><br><span class="line">        <span class="comment">-- 即 Cont (IO ()) String</span></span><br><span class="line"><span class="title">onInput</span> f = forever $ <span class="keyword">do</span></span><br><span class="line">    str &lt;- getLine</span><br><span class="line">    f str</span><br></pre></td></tr></table></figure>
+
+<p>如果你曾经使用过涉及回调的框架，你会对这种写法感到熟悉。我们提供给框架一个函数（或者说一个续体），框架会使用这个函数来完成它的工作。</p>
+<h2 id="“稍后完成我”"><a href="#“稍后完成我”" class="headerlink" title="“稍后完成我”"></a>“稍后完成我”</h2><p>在使用续体编写程序时，通常会交给别人来完成它。常见原因包括：</p>
+<ul>
+<li>你正在编程框架使用了用户提供的回调</li>
+<li>你正在为游戏玩家定义一个供他们定制的地图引擎</li>
+<li>你很懒</li>
+</ul>
+<p>我将使用下面假设的代码段作为例子：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">unitAttack</span> :: <span class="type">Target</span> -&gt; <span class="type">IO</span> ()</span><br><span class="line"><span class="title">unitAttack</span> target = <span class="keyword">do</span></span><br><span class="line">    swingAxeBack <span class="number">60</span></span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    <span class="keyword">if</span> valid</span><br><span class="line">    <span class="keyword">then</span> ??? target</span><br><span class="line">    <span class="keyword">else</span> sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>假设你必须打包并编译这段代码，供其他人（比如说你的同事）以后使用，但是它还不能编译，因为你还有未确定的 <code>???</code> 函数。你会怎么办？</p>
+<p>像所有好的程序一样，最好的解决方案是最懒惰的。我们将不完整的行为作为一个参数，以便稍后完成函数的人可以通过将特定的行为传入来完成函数：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">unitAttack</span> :: <span class="type">Target</span> -&gt; (<span class="type">Target</span> -&gt; <span class="type">IO</span> ()) -&gt; <span class="type">IO</span> ()</span><br><span class="line"><span class="title">unitAttack</span> target todo = <span class="keyword">do</span></span><br><span class="line">    swingAxeBack <span class="number">60</span></span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    <span class="keyword">if</span> valid</span><br><span class="line">    <span class="keyword">then</span> todo target</span><br><span class="line">    <span class="keyword">else</span> sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>问题解决！注意，右手边的类型签名和我们的 <code>Cont</code> 类型非常相似。我们可以把它包装进 <code>Cont</code>：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">unitAttack</span> :: <span class="type">Target</span> -&gt; <span class="type">Cont</span> (<span class="type">IO</span> ()) <span class="type">Target</span></span><br><span class="line"><span class="title">unitAttack</span> target = <span class="type">Cont</span> $ \todo -&gt; <span class="keyword">do</span></span><br><span class="line">    swingAxeBack <span class="number">60</span></span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    <span class="keyword">if</span> valid</span><br><span class="line">    <span class="keyword">then</span> todo target</span><br><span class="line">    <span class="keyword">else</span> sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>……或者，更好的是，我们可以使用 <code>ContT</code> 来替代。它的好处在于它是一个单子变换器，可以更加方便。<code>ContT</code> 和 <code>Cont</code> 具有相同的 <code>Monad</code> 实例，所以它们可以相互替换：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">newtype</span> <span class="type">ContT</span> r m a = <span class="type">ContT</span> &#123; <span class="title">runContT</span> :: (<span class="title">a</span> -&gt; <span class="title">m</span> <span class="title">r</span>) -&gt; <span class="title">m</span> <span class="title">r</span> &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="title">unitAttack</span> :: <span class="type">Target</span> -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">Target</span></span><br><span class="line"><span class="title">unitAttack</span> target = <span class="type">ContT</span> $ \todo -&gt; <span class="keyword">do</span></span><br><span class="line">    swingAxeBack <span class="number">60</span></span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    <span class="keyword">if</span> valid</span><br><span class="line">    <span class="keyword">then</span> todo target</span><br><span class="line">    <span class="keyword">else</span> sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>这非常妙，因为现在其他人可以从我们停下的地方延续了（因此得名：续体）。他们只需定义出缺少的函数：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">damageTarget</span> :: <span class="type">Target</span> -&gt; <span class="type">IO</span> ()</span><br></pre></td></tr></table></figure>
+
+<p>并把它提供给我们的续体去完成。</p>
+<h2 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h2><p>当我们的函数中仅有一个洞时这个策略十分有效，但如果我们的函数中有两个洞，并且他们需要不同的参数呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">unitAttack :: Target -&gt; IO ()</span><br><span class="line">unitAttack target &#x3D; do</span><br><span class="line">    ???_1 60</span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    if valid</span><br><span class="line">    then ???_2 target</span><br><span class="line">    else sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>好吧，我们可以试着接受两个续体：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">unitAttack</span></span><br><span class="line"> :: <span class="type">Target</span> -&gt; (<span class="type">Int</span> -&gt; <span class="type">IO</span> ()) -&gt; (<span class="type">Target</span> -&gt; <span class="type">IO</span> ()) -&gt; <span class="type">IO</span> ()</span><br><span class="line"><span class="title">unitAttack</span> target todo1 todo2 = <span class="keyword">do</span></span><br><span class="line">    todo1 <span class="number">60</span></span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    <span class="keyword">if</span> valid</span><br><span class="line">    <span class="keyword">then</span> todo2 target</span><br><span class="line">    <span class="keyword">else</span> sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>……不过这就不再完好地适合我们的 <code>Cont</code> 类型了，它只需一个续体。</p>
+<p>幸运的是，有一个清爽并且通用的解决方案。只需定义一个数据类型，将两种可能的参数使用和类型包装起来，并定义一个接收这个和类型的续体：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Hole</span> = <span class="type">Swing</span> <span class="type">Int</span> | <span class="type">Attack</span> <span class="type">Target</span></span></span><br><span class="line"></span><br><span class="line"><span class="title">unitAttack</span> :: <span class="type">Target</span> -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">Hole</span></span><br><span class="line"><span class="title">unitAttack</span> target = <span class="type">ContT</span> $ \k -&gt; <span class="keyword">do</span></span><br><span class="line">    k (<span class="type">Swing</span> <span class="number">60</span>)</span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    <span class="keyword">if</span> valid</span><br><span class="line">    <span class="keyword">then</span> k (<span class="type">Attack</span> target)</span><br><span class="line">    <span class="keyword">else</span> sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>每个构造子像是一个占位符，告诉续体正在填的是哪个洞。然后其他人可以从我们停止的地方延续，只需写：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">damage</span>    :: <span class="type">Target</span> -&gt; <span class="type">IO</span> ()</span><br><span class="line"><span class="title">swingBack</span> :: <span class="type">Int</span> -&gt; <span class="type">IO</span> ()</span><br><span class="line"></span><br><span class="line"><span class="title">continue</span> :: <span class="type">Hole</span> -&gt; <span class="type">IO</span> ()</span><br><span class="line"><span class="title">continue</span> (<span class="type">Swing</span>  n) = swingBack n</span><br><span class="line"><span class="title">continue</span> (<span class="type">Attack</span> t) = damage t</span><br><span class="line"></span><br><span class="line"><span class="title">runContT</span> (unitAttack target) continue :: <span class="type">IO</span> ()</span><br></pre></td></tr></table></figure>
+
+<p>这个技巧可以推广到 <code>n</code> 个洞，每个洞都有可变参数。只需定义有 <code>n</code> 个构造子的类型，让每个洞都有一个构造子，并在构造子中储存特定续体所需的参数：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Hole</span> = <span class="type">Hole1</span> <span class="type">Arg1</span> <span class="type">Arg2</span> | <span class="type">Hole2</span> | <span class="type">Hole3</span> <span class="type">Arg3</span> | <span class="type">Hole4</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="代数数据类型"><a href="#代数数据类型" class="headerlink" title="代数数据类型"></a>代数数据类型</h2><p>歪个题，我想稍微说说代数数据类型。如果你不感兴趣的话，可以跳到下一节。事实证明，我们可以很好地推导出上述应用在多个洞的技巧。类型代数告诉我们，可以把下面的类型构造子转换成代数运算符，并从简单的代数操作中得到等价的类型：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Either</span> a b  &lt;=&gt;  a + b</span><br><span class="line">(a, b)      &lt;=&gt;  a * b</span><br><span class="line"><span class="title">a</span> -&gt; b      &lt;=&gt;  b ^ a</span><br></pre></td></tr></table></figure>
+
+<p>这意味着如果我们有一个带着两个续体的函数：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(a1 -&gt; r) -&gt; ((a2 -&gt; r) -&gt; r)</span><br></pre></td></tr></table></figure>
+
+<p>……我们可以把它翻译成等价的代数表达式：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(r ^ (r ^ a2)) ^ (r ^ a1)</span><br></pre></td></tr></table></figure>
+
+<p>……之后使用代数运算法则得到等价的表示：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  (r ^ (r ^ a2)) ^ (r ^ a1)</span><br><span class="line">= r ^ ((r ^ a2) * (r ^ a1))</span><br><span class="line">= r ^ (r ^ (a2 + a1))</span><br></pre></td></tr></table></figure>
+
+<p>……再把它换回等价的类型，可得：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="type">Either</span> a2 a1 -&gt; r) -&gt; r</span><br></pre></td></tr></table></figure>
+
+<p>……这正是在前一节中我们所说的技巧。</p>
+<p>相似地，如果我们有一个多参数的续体：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(a -&gt; b -&gt; r) -&gt; r</span><br></pre></td></tr></table></figure>
+
+<p>……我们可以使用类型代数运算得到等价的单参形式：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  r ^ ((r ^ a) ^ b)</span><br><span class="line">= r ^ (r ^ (a * b))</span><br></pre></td></tr></table></figure>
+
+<p>……转回去就是：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((a, b) -&gt; r) -&gt; r</span><br></pre></td></tr></table></figure>
+
+<h2 id="续体单子"><a href="#续体单子" class="headerlink" title="续体单子"></a>续体单子</h2><p>目前为止，我们已经解释了续体的用途，但还没解释单子的。</p>
+<p>我坚信通往 <code>Monad</code> 的核心是理解 Kleisli 箭头，如果你想研究单子的目的或者动机，你需要先搞清楚 Kleisli 箭头干了什么。</p>
+<p>与其研究 <code>Cont</code> 的 <code>Monad</code> 实例，不如先看看 <code>Cont</code> 上的 Kleisli 箭头长什么样，并从类型层面推断一下它的作用：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  a -&gt; <span class="type">Cont</span> r b</span><br><span class="line">~ a -&gt; (b -&gt; r) -&gt; r    <span class="comment">-- 展开 Cont 的定义</span></span><br><span class="line">~ (b -&gt; r) -&gt; (a -&gt; r)  <span class="comment">-- 翻转参数</span></span><br></pre></td></tr></table></figure>
+
+<p>换句话说，我们拿到一个处理 <code>a</code> 的函数并将它变换为处理 <code>b</code> 的。</p>
+<p>这表明了续体单子的一个最初的基本直觉：我们在变换处理器（Handler）。</p>
+<p>让我们回顾一下之前的例子来建立这种直觉：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">unitAttack</span> :: <span class="type">Target</span> -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">Target</span></span><br><span class="line"><span class="title">unitAttack</span> target = <span class="type">ContT</span> $ \todo -&gt; <span class="keyword">do</span></span><br><span class="line">    swingBack <span class="number">60</span></span><br><span class="line">    valid &lt;- isTargetValid target</span><br><span class="line">    <span class="keyword">if</span> valid</span><br><span class="line">    <span class="keyword">then</span> todo target</span><br><span class="line">    <span class="keyword">else</span> sayUhOh</span><br></pre></td></tr></table></figure>
+
+<p>我们需要的完成函数的类型为：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">handler</span> :: <span class="type">Target</span> -&gt; <span class="type">IO</span> ()</span><br></pre></td></tr></table></figure>
+
+<p>我们<em>可以</em> 完成这个函数 …… 或者中途放弃：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">halfAssedCompletion</span> :: <span class="type">Target</span> -&gt; <span class="type">IO</span> ()</span><br><span class="line"><span class="title">halfAssedCompletion</span> target = <span class="keyword">do</span></span><br><span class="line">    registerUnitBeingAttacked</span><br><span class="line">    playDamageSound</span><br><span class="line">    ??? <span class="number">40</span>  <span class="comment">-- 快接近了……</span></span><br></pre></td></tr></table></figure>
+
+<p>这意味着本质上我们创建了一个新的延续，带着稍微小一点的洞：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">halfAssedCompletion</span> :: <span class="type">Target</span> -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">Int</span></span><br><span class="line"><span class="title">halfAssedCompletion</span> target = <span class="type">ContT</span> $ \todo -&gt; <span class="keyword">do</span></span><br><span class="line">    registerUnitBeingAttacked</span><br><span class="line">    playDamageSound</span><br><span class="line">    todo <span class="number">40</span></span><br></pre></td></tr></table></figure>
+
+<p>这就是一个 Kleisli 箭头！这也意味着我们可以用它和上一个 Kleisli 箭头组合：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">unitAttack</span> &gt;=&gt; halfAssedCompletion :: <span class="type">Target</span> -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">Int</span></span><br></pre></td></tr></table></figure>
+
+<p>这个组合把 <code>unitAttack</code> 函数代入了我们在 <code>halfAssedCompletion</code> 中留下的每个洞。然而，<code>halfAssedCompletion</code> 留下了更小的 <code>Int</code> 洞，其他人现在需要完成它。</p>
+<p>注意，我们原来需要的处理器类型为：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">handler</span> :: <span class="type">Target</span> -&gt; <span class="type">IO</span> ()</span><br></pre></td></tr></table></figure>
+
+<p>……但现在，我们只需更小的：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">newHandler</span> :: <span class="type">Int</span> -&gt; <span class="type">IO</span> ()</span><br></pre></td></tr></table></figure>
+
+<p>……换句话说，<code>halfAssedCompletion</code> 作为一个中间者，将 <code>(Int -&gt; IO ())</code> 类型的处理器变换为 <code>(Target -&gt; IO ())</code>。</p>
+<p><code>Cont</code> 单子就是把这些各种部分完成的操作串在一起，直到所有的洞在最后都被填上。你可以使用这个抽象分阶段地完成一个项目，并在完成项目前维护者变更时能够无缝将工作交给另一个人。或者，你可以使用它将一个框架的回调 API 压缩至单个入口点。</p>
+<h2 id="Kleisli-范畴"><a href="#Kleisli-范畴" class="headerlink" title="Kleisli 范畴"></a>Kleisli 范畴</h2><p>先前我说过单子的核心是它的 Kleisli 箭头。原因在于 Kleisli 箭头是 Kleisli 范畴中的态射，其中 <code>(&gt;=&gt;)</code> 是 Kleisli 箭头的组合：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(&gt;=&gt;) :: (<span class="type">Monad</span> m) =&gt; (a -&gt; m b) -&gt; (b -&gt; m c) -&gt; (a -&gt; m c)</span><br><span class="line">(f &gt;=&gt; g) x = f x &gt;&gt;= g</span><br></pre></td></tr></table></figure>
+
+<p>…… <code>return</code> 是单位元：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">return</span> :: (<span class="type">Monad</span> m) =&gt; a -&gt; m a</span><br></pre></td></tr></table></figure>
+
+<p>如同所有范畴，Kleisli 范畴同样必须遵守范畴定律：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">return &gt;&#x3D;&gt; f &#x3D; f                   -- 左单位元</span><br><span class="line"></span><br><span class="line">f &gt;&#x3D;&gt; return &#x3D; f                   -- 右单位元</span><br><span class="line"></span><br><span class="line">(f &gt;&#x3D;&gt; g) &gt;&#x3D;&gt; h &#x3D; f &gt;&#x3D;&gt; (g &gt;&#x3D;&gt; h)  -- 结合律</span><br></pre></td></tr></table></figure>
+
+<p>遵守这些定律带来了很好的性质。举个例子，它保证你可以独立推导出在组合链中的每一个 Kleisli 箭头。每个 Kleisli 箭头的行为完全取决于它的输入（域）和输出（陪域）。那么让我们来想想模块化是如何转化为 <code>Cont</code> Kleisli 范畴的。</p>
+<p>当变更维护者时，你不需要像这样给下一个维护者一堆遍布大量代码的洞：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">largeProgram</span> = <span class="keyword">do</span></span><br><span class="line">    ...</span><br><span class="line">    x &lt;- ???_1 y</span><br><span class="line">    ...</span><br><span class="line">    ???_2 horseTheyRodeInOn</span><br><span class="line">    ...</span><br><span class="line">    spawn ???_29 foo</span><br></pre></td></tr></table></figure>
+
+<p>取而代之的是，你可以使用一个回调来统一所有的洞，这个回调接收单个类型（陪域）：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">largeProgram</span> :: () -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">Hole</span></span><br><span class="line"><span class="title">largeProgram</span> () = <span class="type">ContT</span> $ \k -&gt; <span class="keyword">do</span></span><br><span class="line">    ...</span><br><span class="line">    x &lt;- k (<span class="type">Hole1</span> y)</span><br><span class="line">    ...</span><br><span class="line">    k <span class="type">Hole2</span></span><br><span class="line">    ...</span><br><span class="line">    k (<span class="type">Hole29</span> spawn foo)</span><br></pre></td></tr></table></figure>
+
+<p>这给下一个人一个单入口点去延续，因为他们现在只需要写一个 Kleisli 箭头来处理 <code>Hole</code>，其中包括以前所有的洞：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">nextContribution</span> :: <span class="type">Hole</span> -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">NextHole</span></span><br><span class="line"><span class="title">nextContribution</span> currHole = <span class="type">ConT</span> $ \nextHole -&gt; <span class="keyword">case</span> currHole <span class="keyword">of</span></span><br><span class="line">    <span class="type">Hole1</span> y -&gt; ... <span class="comment">-- 填第一个洞</span></span><br><span class="line">    <span class="type">Hole2</span>   -&gt; ... <span class="comment">-- 填第二个洞</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="type">Hole29</span> spawn foo -&gt; ... <span class="comment">-- 填第二十九个洞</span></span><br></pre></td></tr></table></figure>
+
+<p>然后只需使用 Kleisli 组合连接你的代码贡献：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">largeProgram</span> &gt;=&gt; nextContribution</span><br></pre></td></tr></table></figure>
+
+<p>这清晰地模块化了第一个人的贡献，后续的贡献也可以被分隔开来。通过重复这个过程，每个后续的代码贡献保持模块化，成为可组合的 Kleisli 箭头，和其他贡献清楚地分开：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">alice'sWork</span> :: a -&gt; <span class="type">ContT</span> r m b </span><br><span class="line"><span class="title">bob'sWork</span>   :: b -&gt; <span class="type">ContT</span> r m c</span><br><span class="line"><span class="title">carlo'sWork</span> :: c -&gt; <span class="type">ContT</span> r m d </span><br><span class="line"></span><br><span class="line"><span class="title">engine</span> = alice'sWork &gt;=&gt; bob'sWork &gt;=&gt; carlo'sWork :: a -&gt; <span class="type">ContT</span> r m d</span><br><span class="line"></span><br><span class="line"><span class="title">customMap</span> :: d -&gt; <span class="type">ContT</span> r m e</span><br><span class="line"></span><br><span class="line"><span class="title">completeGame</span> = engine &gt;=&gt; customMap :: a -&gt; <span class="type">ContT</span> r m e</span><br></pre></td></tr></table></figure>
+
+<p>这就是为什么框架和游戏自定义地图制作者使用续体来作为公司代码和用户代码之间接口，分隔代码。续体单子可以建立严密的代码边界，包括在项目内部以及面向用户的外部 API。在把贡献代码分隔成 Kleisli 箭头的同时也分隔了每部分的职责。</p>
+<h2 id="回调地狱"><a href="#回调地狱" class="headerlink" title="回调地狱"></a>回调地狱</h2><p>框架是分离职责的典型例子，其中框架作者提供了一些代码，但是用户需要用自己的回调来填补空白。这通常会导致在使用一些框架时出现回调地狱，Node.js 就是其中将该原则发挥极致的一个。</p>
+<p>但是并非一定如此。续体单子告诉我们一个遍布回调的庞大 API 总是可以压缩成一个单回调单参数的。更好的是，我们得到了用于组合多层回调的单子语法糖。</p>
+<p>我会用 <code>GLUT</code> 作为一个例子，它需要一些像这样的回调：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">ReshapeCallback</span> = <span class="type">Size</span> -&gt; <span class="type">IO</span> ()</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">VisibilityCallback</span> = <span class="type">Visibility</span> -&gt; <span class="type">IO</span> ()</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">WindowStateCallback</span> = <span class="type">WindowState</span> -&gt; <span class="type">IO</span> ()</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">CloseCallback</span> = <span class="type">IO</span> ()</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 还有好多，但先止步于此</span></span><br></pre></td></tr></table></figure>
+
+<p>相反地是，我们可以把 GLUT 的多个回调包装进一个规范的 <code>ConT</code> API：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">glut</span> :: () -&gt; <span class="type">ContT</span> () <span class="type">IO</span> <span class="type">Hole</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Hole</span></span></span><br><span class="line">   = <span class="type">Reshape</span> <span class="type">Size</span></span><br><span class="line">   | <span class="type">Visible</span> <span class="type">Visibility</span></span><br><span class="line">   | <span class="type">Window</span> <span class="type">WindowState</span></span><br><span class="line">   | <span class="type">Close</span></span><br><span class="line">   ...</span><br></pre></td></tr></table></figure>
+
+<p>现在末端用户仅有单个 GLUT 单子的入口点，因此他们只需在单个函数中完成框架：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">userCallbacks</span> :: <span class="type">Hole</span> -&gt; <span class="type">ContT</span> () <span class="type">IO</span> a</span><br><span class="line"><span class="title">userCallbacks</span> hole = <span class="type">ContT</span> $ \_ -&gt; <span class="keyword">case</span> hole <span class="keyword">of</span></span><br><span class="line">    <span class="type">Reshape</span> size -&gt; ... <span class="comment">-- Handle reshapes</span></span><br><span class="line">    <span class="type">Visibility</span> v -&gt; ... <span class="comment">-- Handle visibility switches</span></span><br><span class="line">    <span class="type">Window</span> ws    -&gt; ... <span class="comment">-- Handle changes to window state</span></span><br><span class="line">    <span class="type">Close</span>        -&gt; ... <span class="comment">-- Handle window closing</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>此外，他们现在可以将代码组合到 glut 框架：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">glut</span> &gt;=&gt; userCallbacks :: () -&gt; <span class="type">ContT</span> () <span class="type">IO</span> a</span><br></pre></td></tr></table></figure>
+
+<h2 id="止步于此"><a href="#止步于此" class="headerlink" title="止步于此"></a>止步于此</h2><p>我们如何知道续体已经完成，并且没有后续了呢？让我们看看在没有更多的洞，并且不使用续体的情况下编译器推出的类型：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="keyword">let</span> done = <span class="type">ContT</span> $ \_ -&gt; return ()</span><br><span class="line">&gt;&gt;&gt; :t done</span><br><span class="line"><span class="title">done</span> :: <span class="type">Monad</span> m =&gt; <span class="type">ContT</span> () m a</span><br></pre></td></tr></table></figure>
+
+<p>返回类型是多态的，意味着没有留下未填的洞了。上述函数只是在所有洞里填上了 <code>return ()</code>。我们也可以证明如果最终返回结果的类型是 <code>Void</code>，空类型，续体链也是完成的：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">absurd</span> :: <span class="type">Void</span> -&gt; a  <span class="comment">-- 来自 "void" 包</span></span><br><span class="line"></span><br><span class="line"><span class="title">run</span> :: (<span class="type">Monad</span> m) =&gt; <span class="type">ContT</span> r m <span class="type">Void</span> -&gt; m r</span><br><span class="line"><span class="title">run</span> c = runContT c absurd</span><br></pre></td></tr></table></figure>
+
+<p><code>run</code> 只接收完成，没有洞的程序。我们可以在上个 GLUT 例子中使用 <code>run</code>，因为最终的用户回调处理器没有留下未完成的洞：</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">run</span> ((glut &gt;=&gt; userCallbacks) ()) :: <span class="type">IO</span> ()</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我希望这篇文章能够激励人们去使用续体单子来构造和模块化代码完成的边界。续体单子在程序员尝试把一个回调地狱抽象成简单、统一、单个入口的干净接口时很自然地出现。</p>
+
+      
+    
+    </div>
+    
+      <div class="post-tags syuanpi fadeInRightShort back-3">
+      
+        <a href="/tags/Haskell/">Haskell</a>
+      
+      </div>
+    
+    
+      
+
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>作者 :</span>
+      <span>berberman</span>
+    </div>
+    <div class="copy-url">
+      <span>地址 :</span>
+      <a href="https://berberman.cn/2020/05/15/the-continuation-monad/">https://berberman.cn/2020/05/15/the-continuation-monad/</a>
+    </div>
+    <div class="copy-origin">
+      <span>来源 :</span>
+      <a href="https://berberman.cn">https://berberman.cn</a>
+    </div>
+    <div class="copy-license">
+      
+      WTFPL
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+    
+      <a href="/2020/02/11/type-families-and-pokemon/" id="art-right" class="art-right">
+        <span class="prev-title">
+          类型家族与精灵宝可梦<i class="iconfont icon-right"></i>
+        </span>
+      </a>
+    
+  </nav>
+
+
+    
+  <i id="com-switch" class="iconfont icon-down jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+
+    
+    
+
+    
+
+  </div>
+
+
+
+  
+  
+    
+  
+  <aside class="post-toc">
+    <div class="title"><span>文章导航</span></div>
+    <div class="toc-inner">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#续体"><span class="toc-text">续体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#“稍后完成我”"><span class="toc-text">“稍后完成我”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#可变参数"><span class="toc-text">可变参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代数数据类型"><span class="toc-text">代数数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#续体单子"><span class="toc-text">续体单子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kleisli-范畴"><span class="toc-text">Kleisli 范畴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#回调地狱"><span class="toc-text">回调地狱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#止步于此"><span class="toc-text">止步于此</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </aside>
+
+
+
+  
+
+
+        </div>
+      </main>
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+  
+  
+</div>
+
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2020</span>
+        <span>❤</span>
+        <span>berberman</span>
+    </div>
+    <div class="theme">
+        <span>
+            动力来源于
+            <a href="http://hexo.io/" target="_blank" rel="noopener">Hexo </a>
+        </span>
+        <span>
+            主题
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi" target="_blank" rel="noopener"> Nlvi </a>
+        </span>
+    </div>
+    
+</div>
+
+    </div>
+  </div>
+</footer>
+    </div>
+    <div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-taglist">
+  
+    <div class="tagcloud-tag">
+      <button>Minecraft</button>
+    </div>
+  
+    <div class="tagcloud-tag">
+      <button>Haskell</button>
+    </div>
+  
+  </div>
+  
+    <div class="tagcloud-postlist active">
+      <h2>Minecraft</h2>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/30/minecraft-dsl-command/">
+            <time class="tagcloud-posttime">2018 / 01 / 30</time>
+            <span>Minecraft-Bukkit插件-DSL注册命令</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/01/31/minecraft-dsl-event/">
+            <time class="tagcloud-posttime">2018 / 01 / 31</time>
+            <span>Minecraft-Bukkit插件-DSL注册事件监听器</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2018/05/08/minecraft-plugin-classloader/">
+            <time class="tagcloud-posttime">2018 / 05 / 08</time>
+            <span>Minecraft-Bukkit插件-插件类加载器</span>
+          </a>
+        </div>
+      
+    </div>
+  
+    <div class="tagcloud-postlist ">
+      <h2>Haskell</h2>
+      
+        <div class="tagcloud-post">
+          <a href="/2020/05/15/the-continuation-monad/">
+            <time class="tagcloud-posttime">2020 / 05 / 15</time>
+            <span>续体单子</span>
+          </a>
+        </div>
+      
+        <div class="tagcloud-post">
+          <a href="/2020/02/11/type-families-and-pokemon/">
+            <time class="tagcloud-posttime">2020 / 02 / 11</time>
+            <span>类型家族与精灵宝可梦</span>
+          </a>
+        </div>
+      
+    </div>
+  
+</div>
+
+  </div>
+  <div class="backtop syuanpi melt toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+  <div class="search" id="search">
+    <div class="input">
+      <input type="text" id="search-input" placeholder="搜索一下？" autofocus>
+    </div>
+    <div id="search-result"></div>
+  </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.7/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+
+
+
+
+  
+<script src="/script/lib/pjax/pjax.js"></script>
+
+
+
+
+  
+<script src="/script/scheme/banderole.js"></script>
+
+
+
+
+<script src="/script/bootstarp.js"></script>
+
+
+
+<script>
+if (nlviconfig.theme.toc) {
+  setTimeout(function() {
+    if (nlviconfig.theme.scheme === 'balance') {
+      $("#header").addClass("show_toc");
+    } else if (nlviconfig.theme.scheme === 'banderole') {
+      $(".container-inner").addClass("has_toc");
+      $(".post-toc .title").addClass("show");
+      $(".toc-inner").addClass("show");
+    }
+  }, 1000);
+}
+</script>
+
+
+
+</body>
+</html>
