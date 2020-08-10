@@ -243,7 +243,35 @@
 <li><em>relevant</em> —— 这个参数是相关的，即这个参数值能在运行期函数体中使用。</li>
 <li><em>visible</em> —— 这个参数是可见的，即这个参数能显式传入。</li>
 </ul>
-<p>这样我们可以画出一张表（在常规情况下）：<br>| …         | 类型变量 | 类型类实例 | 通常的项 |<br>| ———– | ——– | ———- | ——– |<br>| <em>dependent</em> | 是       | 否         | 否       |<br>| <em>relevant</em>  | 否       | 是         | 是       |<br>| <em>visible</em>   | 否       | 否         | 是       |</p>
+<p>这样我们可以画出一张表（在常规情况下）：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>类型变量</th>
+<th>类型类实例</th>
+<th>通常的项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>dependent</em></td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td><em>relevant</em></td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td><em>visible</em></td>
+<td>否</td>
+<td>否</td>
+<td>是</td>
+</tr>
+</tbody></table>
 <p>通过上面 <code>const</code> 与 <code>shout</code> 的例子，我们得知了（<strong>在常规情况下</strong>）：</p>
 <ul>
 <li><p>通常项，例如 <code>Int -&gt; ...</code> 是 <em>relevant</em>（参数就要在函数体用嘛）、<em>visible</em>（当然要显式传，不然怎么知道是几）并且 <em>non-dependent</em>（你 Haskell 并没有原生依赖类型）的。</p>
