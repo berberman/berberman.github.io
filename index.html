@@ -276,7 +276,7 @@
 <ul>
 <li><p>通常项，例如 <code>Int -&gt; ...</code> 是 <em>relevant</em>（参数就要在函数体用嘛）、<em>visible</em>（当然要显式传，不然怎么知道是几）并且 <em>non-dependent</em>（你 Haskell 并没有原生依赖类型）的。</p>
 </li>
-<li><p>类型类实例，例如 <code>Show a =&gt; ...</code> 是 <em>relevant<em>（函数体可以调用到类型类实例中的代码）、</em>invisible*（前面说过了，只能靠编译器找）并且 *non-dependent</em> 的。</p>
+<li><p>类型类实例，例如 <code>Show a =&gt; ...</code> 是 <em>relevant<em>（函数体可以调用到类型类实例中的代码）、</em>invisible</em> （前面说过了，只能靠编译器找）并且 <em>non-dependent</em>  的。</p>
 </li>
 <li><p>类型变量，例如 <code>∀ (a :: Type). ...</code> 是 <em>irrelevant<em>、</em>invisible</em> 并且 <em>non-dependent</em> 的。</p>
 </li>
