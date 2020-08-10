@@ -222,7 +222,7 @@
 <h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">const</span> :: a -&gt; b -&gt; a</span><br><span class="line"><span class="title">const</span> x y = x</span><br></pre></td></tr></table></figure>
 
 <p><code>const</code> 函数接收几个参数呢？是 <code>a</code> 类型的 <code>x</code> 与 <code>b</code> 类型的 <code>y</code> —— 两个吗？</p>
-<p>为了便捷，GHC 默认会省略掉 rank 1 的 quantifier。我们可以打开语言扩展<br><code>ExplicitForAll</code> 并在 GHCI 中开启参数 <code>-fprint-explicit-foralls</code>，以便在代码中可以显式书写量词，以及使得在 GHCI 使用 <code>:t</code> 时会同时打印出量词。<br>当然，有了 <code>UnicodeSyntax</code> 语言扩展，<code>∀</code> 也能被 parse。所以我们可以改写一下新的 <code>const</code>：</p>
+<p>为了便捷，GHC 默认会省略掉 rank 1 的 quantifier。我们可以打开语言扩展<br><code>ExplicitForAll</code> 并在 GHCi中开启参数 <code>-fprint-explicit-foralls</code>，以便在代码中可以显式书写量词，以及使得在 GHCi 使用 <code>:t</code> 时会同时打印出量词。<br>当然，有了 <code>UnicodeSyntax</code> 语言扩展，<code>∀</code> 也能被 parse。所以我们可以改写一下新的 <code>const</code>：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">const</span> :: ∀ a b . a -&gt; b -&gt; a</span><br><span class="line"><span class="title">const</span> x y = x</span><br></pre></td></tr></table></figure>
 
 <p>这样就清晰多了 —— <code>const</code> 接收四个参数：类型变量 <code>a</code> 和 <code>b</code>，以及 <code>x</code> 和 <code>y</code>。</p>
@@ -237,7 +237,7 @@
 <li><em>relevant</em> —— 这个参数是相关的，即这个参数值能在运行期函数体中使用。</li>
 <li><em>visible</em> —— 这个参数是可见的，即这个参数能显式传入。</li>
 </ul>
-<p>这样我们可以画出一张表（在常规情况下）：<br>|             | 类型变量 | 类型类实例 | 通常的项 |<br>| ———– | ——– | ———- | ——– |<br>| <em>dependent</em> | 是       | 否         | 否       |<br>| <em>relevant</em>  | 否       | 是         | 是       |<br>| <em>visible</em>   | 否       | 否         | 是       |</p>
+<p>这样我们可以画出一张表（在常规情况下）：<br>| \           | 类型变量 | 类型类实例 | 通常的项 |<br>| ———– | ——– | ———- | ——– |<br>| <em>dependent</em> | 是       | 否         | 否       |<br>| <em>relevant</em>  | 否       | 是         | 是       |<br>| <em>visible</em>   | 否       | 否         | 是       |</p>
 <p>通过上面 <code>const</code> 与 <code>shout</code> 的例子，我们得知了（<strong>在常规情况下</strong>）：</p>
 <ul>
 <li><p>通常项，例如 <code>Int -&gt; ...</code> 是 <em>relevant</em>（参数就要在函数体用嘛）、<em>visible</em>（当然要显式传，不然怎么知道是几）并且 <em>non-dependent</em>（你 Haskell 并没有原生依赖类型）的。</p>
@@ -323,7 +323,7 @@
 <p>Term 层不行的话咱就来 Type 层实现：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">type</span> <span class="type">WeirdId3</span> :: ∀ a -&gt; a -&gt; a <span class="comment">-- 需要打开 StandaloneKindSignatures</span></span></span><br><span class="line"><span class="class"><span class="keyword">type</span> <span class="keyword">family</span> <span class="type">WeirdId3</span> a x where</span></span><br><span class="line">  <span class="type">WeirdId3</span> <span class="type">Bool</span> <span class="type">True</span> = <span class="type">False</span></span><br><span class="line">  <span class="type">WeirdId3</span> _    x    = x</span><br></pre></td></tr></table></figure>
 
-<p>唔姆，类型家族很好理解，就是定义一个 Type Level 的函数。在 GCHI 中运行 <code>!k WeirdId3 Bool True</code> 可以得到 <code>&#39;False</code>。注意这个 <code>&#39;</code> —— 咱运算得出的结果还在类型层面，<code>&#39;False</code> 的 kind 是 <code>Bool</code>。类似，运行 <code>WeirdId3 Symbol &quot;hello&quot;</code> 可以得到 <code>&quot;hello&quot;</code>，当然这个 <code>&quot;hello&quot;</code> 不是 <code>String</code> 的实例，而是 kind 为 <code>Symbol</code> 的一个类型。所有在 Type Level 量化的类型变量都是 <em>relevant</em> 的，这是 GHC 钦定的。</p>
+<p>唔姆，类型家族很好理解，就是定义一个 Type Level 的函数。在 GHCi 中运行 <code>:k WeirdId3 Bool True</code> 可以得到 <code>&#39;False</code>。注意这个 <code>&#39;</code> —— 咱运算得出的结果还在类型层面，<code>&#39;False</code> 的 kind 是 <code>Bool</code>。类似，运行 <code>WeirdId3 Symbol &quot;hello&quot;</code> 可以得到 <code>&quot;hello&quot;</code>，当然这个 <code>&quot;hello&quot;</code> 不是 <code>String</code> 的实例，而是 kind 为 <code>Symbol</code> 的一个类型。所有在 Type Level 量化的类型变量都是 <em>relevant</em> 的，这是 GHC 钦定的。</p>
 <p>好像完事了，来把表填上：</p>
 <table>
 <thead>
