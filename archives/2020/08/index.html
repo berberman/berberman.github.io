@@ -12,6 +12,9 @@
 <meta name="msapplication-navbutton-color" content="#666666">
 <meta name= "format-detection" content="telephone=no" />
 
+  <link rel="apple-touch-icon"  sizes="72x72"  href="https://www.berberman.cn/favicon.ico">
+  <link rel="apple-touch-icon-precomposed"  sizes="72x72"  href="https://www.berberman.cn/favicon.ico">
+
 
 
 
@@ -30,15 +33,15 @@
     author: "berberman",
     baseUrl: "/",
     theme: {
-      scheme: "",
-      lightbox: ,
-      animate: ,
-      search: false,
+      scheme: "banderole",
+      lightbox: false,
+      animate: false,
+      search: true,
       friends: false,
       reward: false,
-      pjax: false,
+      pjax: true,
       lazy: false,
-      toc: false
+      toc: true
     }
   }
 </script>
@@ -52,8 +55,12 @@
 
 
 
+    <link rel="icon" href="https://www.berberman.cn/favicon.ico">
 
 
+
+
+    <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
 
 
 
@@ -89,6 +96,70 @@
 
     <nav class="main-nav">
   
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search-btn" aria-label="Search">
+        <i class="iconfont icon-search"></i>
+      </a>
+    </li>
+  
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">
+          
+            ARTICLE
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">
+          
+            ARCHIVES
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">
+          
+            TAGS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/atom.xml" id="rss">
+        <span class="base-name">
+          
+            RSS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+  </ul>
+  
 </nav>
 
   </div>
@@ -107,6 +178,38 @@
   </div>
   <div class="mobile-header-body">
     <ul class="mobile-header-list">
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-0">
+          <a href="/" >
+            
+              ARTICLE
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-1">
+          <a href="/archives" >
+            
+              ARCHIVES
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-2">
+          <a href="javascript:;" id="mobile-tags">
+            
+              TAGS
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-3">
+          <a href="/atom.xml" >
+            
+              RSS
+            
+          </a>
+        </li>
       
     </ul>
   </div>
@@ -387,7 +490,7 @@
       <div class="copyright">
     <div class="info">
         <span>&copy;</span>
-        <span> ~ 2020</span>
+        <span>2018 ~ 2020</span>
         <span>❤</span>
         <span>berberman</span>
     </div>
@@ -481,6 +584,13 @@
     <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
 </div>
 
+  <div class="search" id="search">
+    <div class="input">
+      <input type="text" id="search-input" placeholder="搜索一下？" autofocus>
+    </div>
+    <div id="search-result"></div>
+  </div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
@@ -489,7 +599,8 @@
 
 
 
-
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.7/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
 
 
 
@@ -498,7 +609,13 @@
 
 
   
-<script src="/script/scheme/balance.js"></script>
+<script src="/script/lib/pjax/pjax.js"></script>
+
+
+
+
+  
+<script src="/script/scheme/banderole.js"></script>
 
 
 

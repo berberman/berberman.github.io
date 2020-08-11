@@ -12,6 +12,9 @@
 <meta name="msapplication-navbutton-color" content="#666666">
 <meta name= "format-detection" content="telephone=no" />
 
+  <link rel="apple-touch-icon"  sizes="72x72"  href="https://www.berberman.cn/favicon.ico">
+  <link rel="apple-touch-icon-precomposed"  sizes="72x72"  href="https://www.berberman.cn/favicon.ico">
+
 
 
 
@@ -32,15 +35,15 @@
     author: "berberman",
     baseUrl: "/",
     theme: {
-      scheme: "",
-      lightbox: ,
-      animate: ,
-      search: false,
+      scheme: "banderole",
+      lightbox: false,
+      animate: false,
+      search: true,
       friends: false,
       reward: false,
-      pjax: false,
+      pjax: true,
       lazy: false,
-      toc: false
+      toc: true
     }
   }
 </script>
@@ -54,8 +57,12 @@
 
 
 
+    <link rel="icon" href="https://www.berberman.cn/favicon.ico">
 
 
+
+
+    <link rel="alternate" type="application/rss+xml" href="/atom.xml" />
 
 
 
@@ -87,6 +94,70 @@
 
     <nav class="main-nav">
   
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search-btn" aria-label="Search">
+        <i class="iconfont icon-search"></i>
+      </a>
+    </li>
+  
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">
+          
+            ARTICLE
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">
+          
+            ARCHIVES
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">
+          
+            TAGS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+    
+  
+    <li class="menu-item">
+      <a href="/atom.xml" id="rss">
+        <span class="base-name">
+          
+            RSS
+          
+        </span>
+      </a>
+    </li>
+  
+  
+  </ul>
+  
 </nav>
 
   </div>
@@ -105,6 +176,38 @@
   </div>
   <div class="mobile-header-body">
     <ul class="mobile-header-list">
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-0">
+          <a href="/" >
+            
+              ARTICLE
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-1">
+          <a href="/archives" >
+            
+              ARCHIVES
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-2">
+          <a href="javascript:;" id="mobile-tags">
+            
+              TAGS
+            
+          </a>
+        </li>
+      
+        <li class="mobile-nav-item syuanpi fadeInRightShort back-3">
+          <a href="/atom.xml" >
+            
+              RSS
+            
+          </a>
+        </li>
       
     </ul>
   </div>
@@ -261,6 +364,26 @@
       
 
       
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>作者 :</span>
+      <span>berberman</span>
+    </div>
+    <div class="copy-url">
+      <span>地址 :</span>
+      <a href="https://berberman.cn/2020/02/11/type-families-and-pokemon/">https://berberman.cn/2020/02/11/type-families-and-pokemon/</a>
+    </div>
+    <div class="copy-origin">
+      <span>来源 :</span>
+      <a href="https://berberman.cn">https://berberman.cn</a>
+    </div>
+    <div class="copy-license">
+      
+      WTFPL
+    </div>
+  </div>
+
     
   </article>
   
@@ -299,6 +422,18 @@
 
   
   
+    
+  
+  <aside class="post-toc">
+    <div class="title"><span>文章导航</span></div>
+    <div class="toc-inner">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序言"><span class="toc-text">序言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#来吧，我们开始"><span class="toc-text">来吧，我们开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#初次尝试"><span class="toc-text">初次尝试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引入类型类"><span class="toc-text">引入类型类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#宝可梦类型类"><span class="toc-text">宝可梦类型类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#战斗类型类"><span class="toc-text">战斗类型类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后，引入类型家族！"><span class="toc-text">最后，引入类型家族！</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用类型家族的宝可梦类型类"><span class="toc-text">使用类型家族的宝可梦类型类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#船新的战斗类型类"><span class="toc-text">船新的战斗类型类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关联类型别名"><span class="toc-text">关联类型别名</span></a></li></ol></li></ol>
+    </div>
+  </aside>
+
+
+
+  
 
 
         </div>
@@ -317,7 +452,7 @@
       <div class="copyright">
     <div class="info">
         <span>&copy;</span>
-        <span> ~ 2020</span>
+        <span>2018 ~ 2020</span>
         <span>❤</span>
         <span>berberman</span>
     </div>
@@ -411,6 +546,13 @@
     <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
 </div>
 
+  <div class="search" id="search">
+    <div class="input">
+      <input type="text" id="search-input" placeholder="搜索一下？" autofocus>
+    </div>
+    <div id="search-result"></div>
+  </div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
@@ -419,7 +561,8 @@
 
 
 
-
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.7/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
 
 
 
@@ -428,7 +571,13 @@
 
 
   
-<script src="/script/scheme/balance.js"></script>
+<script src="/script/lib/pjax/pjax.js"></script>
+
+
+
+
+  
+<script src="/script/scheme/banderole.js"></script>
 
 
 
