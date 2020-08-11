@@ -233,22 +233,22 @@ a {
   color: #383838;
 }
 h1 {
-  font-size: 36px;
-}
-h2 {
   font-size: 28px;
 }
-h3 {
+h2 {
   font-size: 24px;
 }
-h4 {
+h3 {
   font-size: 20px;
 }
-h5 {
+h4 {
   font-size: 16px;
 }
-h6 {
+h5 {
   font-size: 14px;
+}
+h6 {
+  font-size: 12px;
 }
 @font-face {
   font-family: 'iconfont'; /* project id 249456 */
@@ -1440,11 +1440,20 @@ body.under {
 }
 .archive .archive-post {
   max-width: 100%;
-  max-height: 320px;
+  height: 260px;
+  max-height: 260px;
   overflow: hidden;
   padding: 16px;
   position: relative;
-  border-bottom: 1px solid #f0f0f0;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0px 2px 12px 0 #fef2f2;
+  margin-bottom: 16px;
+}
+.archive .archive-post :last-child {
+  margin-bottom: 0;
+}
+.archive .archive-post .archive-post-content {
+  filter: blur(3px);
 }
 .archive .archive-post .archive-post-info {
   position: absolute;
@@ -1469,7 +1478,7 @@ body.under {
   bottom: 0;
   left: 0;
   z-index: -1;
-  background: linear-gradient(transparent 12%, #fff 76%);
+  background: linear-gradient(transparent 8%, #fff 84%);
 }
 .archive .archive-post .archive-post-info a {
   text-decoration: none;
