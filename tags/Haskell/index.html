@@ -236,14 +236,14 @@
 <h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">const</span> :: a -&gt; b -&gt; a</span><br><span class="line"><span class="title">const</span> x y = x</span><br></pre></td></tr></table></figure>
 
 <p><code>const</code> 函数接收几个参数呢？是 <code>a</code> 类型的 <code>x</code> 与 <code>b</code> 类型的 <code>y</code> —— 两个吗？</p>
-<p>为了便捷，GHC 默认会省略掉 rank 1 的 quantifier。我们可以打开语言扩展<br><code>ExplicitForAll</code> 并在 GHCi中开启参数 <code>-fprint-explicit-foralls</code>，以便在代码中可以显式书写量词，以及使得在 GHCi 使用 <code>:t</code> 时会同时打印出量词。<br>当然，有了 <code>UnicodeSyntax</code> 语言扩展，<code>∀</code> 也能被 parse。所以我们可以改写一下新的 <code>const</code>：</p>
+<p>为了便捷，GHC 默认会省略掉 rank 1 的 quantifier。我们可以打开语言扩展<br><code>ExplicitForAll</code> 并在 GHCi中开启参数 <code>-fprint-explicit-foralls</code>，以便在代码中可以显式书写量词，以及使得在 GHCi 使用 <code>:t</code> 时会同时打印出量词。当然，有了 <code>UnicodeSyntax</code> 语言扩展，<code>∀</code> 也能被 parse。所以我们可以改写一下新的 <code>const</code>：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">const</span> :: ∀ a b . a -&gt; b -&gt; a</span><br><span class="line"><span class="title">const</span> x y = x</span><br></pre></td></tr></table></figure>
 
-<p>这样就清晰多了 —— <code>const</code> 接收四个参数：类型变量 <code>a</code> 和 <code>b</code>，以及 <code>x</code> 和 <code>y</code>。用过 Polysemy 或者类似 exteff 库的同学可能知道 <code>TypeApplications</code> 这个扩展，开启之后类型变量也能显式指定，例如 <code>const @Int @String 233 &quot;QAQ&quot;</code>，我们可以更加确信 <code>const</code> 有四个参数。</p>
+<p>这样就清晰多了 —— <code>const</code> 接收四个参数：类型变量 <code>a</code> 和 <code>b</code>，以及 <code>x</code> 和 <code>y</code>。有的同志<del>（用过 exteff 相关库）</del>可能知道一个叫 <code>TypeApplications</code> 的扩展，开启它之后类型变量也能显式指定，例如 <code>const @Int @String 233 &quot;QAQ&quot;</code>。这样以来我们可以更加确信 <code>const</code> 有四个参数。</p>
 <p>再来看一个相似的例子：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">shout</span> :: ∀ a . <span class="type">Show</span> a =&gt; a -&gt; <span class="type">String</span></span><br><span class="line"><span class="title">shout</span> x = map toUpper (show x) ++ <span class="string">"!"</span></span><br></pre></td></tr></table></figure>
 
-<p><code>shout</code> 接收三个参数：类型变量 <code>a</code>、类型类实例 <code>Show a</code> 以及 <code>x</code>。类型类实例有点像隐式转换，编译器会在上下文中去找这个东西，使得函数体中能够正确调用类型类约定的函数。<br>值得注意的是和类型变量不同，类型类实例只能靠编译器推断，不能手动传进去。</p>
+<p><code>shout</code> 接收三个参数：类型变量 <code>a</code>、类型类实例 <code>Show a</code> 以及 <code>x</code>。类型类实例有点像隐式转换，编译器会在上下文中去找这个东西，使得函数体中能够正确调用类型类约定的函数。值得注意的是和类型变量不同，类型类实例只能靠编译器推断，不能手动传进去。</p>
             
           </div>
           <div class="archive-post-info">
